@@ -1,7 +1,14 @@
 import "../globals.css";
+import Image from "next/image";
+import headerBackground from "../../../public/sandboxChessImage.png";
 
 const Header = () => {
-    return <h1 className="text-center text-6xl">SandboxChess</h1>
+    return (
+        <div class="flex flex-col items-center mt-10">
+            <Image src={headerBackground} alt="Sandbox Chess" />
+        </div>
+
+    )
 }
 
 
