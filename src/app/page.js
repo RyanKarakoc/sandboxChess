@@ -10,6 +10,4 @@ export default function home() {
     <Header />
   <Menu navigation={navigation} setNavigation={setNavigation}/>
   </>
-
-
 }
