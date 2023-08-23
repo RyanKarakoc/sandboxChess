@@ -32,6 +32,7 @@ class Tile {
 }
 
 const Board = () => {
+
     const initialBoardState = [
         [new Rook("white", whiteRook), new Knight("white", whiteKnight), new Bishop("white", whiteBishop), new Queen("white", whiteQueen), new King("white", whiteKing), new Bishop("white", whiteBishop), new Knight("white", whiteKnight), new Rook("white", whiteRook),],
         [new Pawn("white", whitePawn), new Pawn("white", whitePawn), new Pawn("white", whitePawn), new Pawn("white", whitePawn), new Pawn("white", whitePawn), new Pawn("white", whitePawn), new Pawn("white", whitePawn), new Pawn("white", whitePawn),],
@@ -75,15 +76,17 @@ const Board = () => {
                                 key={`${rowIndex}-${columnIndex}`}
                             >
                                 <div>
+                                    {/* Display Pieces */}
                                     {tile.piece && (
                                         <Image className="absolute inset-0 flex items-center justify-center" src={tile.piece.representation}></Image>
                                     )}
-                                    {/* Display tile numbers */}
+                                    {/* Display Tile Column Letters */}
                                     {tile.row === 1 && (
                                         <div className={`absolute right-1 bottom-0 ${tile.colour === "bg-yellow-100" ? "text-green-700" : "text-yellow-100"} select-none`}>
                                             {tile.column}
                                         </div>
                                     )}
+                                    {/* Display Tile Row Numbers*/}
                                     {tile.column === "a" && (
                                         <div className={`absolute top-0 left-1 ${tile.colour === "bg-yellow-100" ? "text-green-700" : "text-yellow-100"} select-none`}>
                                             {tile.row}
