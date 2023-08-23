@@ -66,7 +66,7 @@ const Board = () => {
     }
 
     return (
-        <div className="flex w-fit">
+        <div className="flex justify-center items-center mb-20">
             <div className="border-4 border-black">
                 {board.map((row, rowIndex) => (
                     <div className="flex" key={rowIndex}>
