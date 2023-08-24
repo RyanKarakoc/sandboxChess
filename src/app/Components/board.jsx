@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image";
+import React, { useState } from "react";
 
 import { Pawn, Rook, Knight, Bishop, Queen, King } from "./piece.js"
 import blackPawn from "../../../public/blackPieces/pawn.png"
@@ -44,15 +45,19 @@ const Board = () => {
         [new Rook("black", blackRook), new Knight("black", blackKnight), new Bishop("black", blackBishop), new Queen("black", blackQueen), new King("black", blackKing), new Bishop("black", blackBishop), new Knight("black", blackKnight), new Rook("black", blackRook),]
     ]
 
+    const [boardState, setBoardState] = useState(initialBoardState)
+    const [movingPiece, setMovingPiece] = useState(null)
+
     const board = [];
+
     const boardSize = 8;
     const letterRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
     for (let row = boardSize; row > 0; row--) {
         const rowTiles = [];
         for (let column = boardSize - 1; column >= 0; column--) {
-            const tile = new Tile(row, letterRef[column]);
-            const piece = initialBoardState[row - 1][column]
+            const tile = new Tile(row, letterRef[column])
+            const piece = boardState[row - 1][column]
             if ((row + column) % 2 !== 0) {
                 tile.update();
             }
@@ -62,7 +67,6 @@ const Board = () => {
             rowTiles.unshift(tile);
         }
         board.push(rowTiles);
-        console.log(board)
     }
 
     return (
@@ -74,11 +78,31 @@ const Board = () => {
                             <div
                                 className={`relative h-10 md:h-20 w-10 md:w-20 ${tile.colour}`}
                                 key={`${rowIndex}-${columnIndex}`}
+                                onDragStart={((e) => {
+                                    setMovingPiece(tile.piece)
+                                })}
+                                onDrag={((e) => {
+                                    tile.piece = null
+                                })}
+                                onDragOver={((e) => {
+                                    e.preventDefault()
+                                })}
+                                onDrop={((e) => {
+                                    tile.piece = movingPiece
+                                    const newBoard = board.map((row) => {
+                                        return row.map((tile) => {
+                                            return tile.piece
+                                        })
+                                    })
+                                    setBoardState(newBoard.reverse())
+                                })}
                             >
                                 <div>
                                     {/* Display Pieces */}
                                     {tile.piece && (
-                                        <Image className="absolute inset-0 flex items-center justify-center" src={tile.piece.representation}></Image>
+                                        <Image
+                                            className={`absolute inset-0 flex items-center justify-center w-fit select-none`} src={tile.piece.representation} alt={`${tile.piece.color} ${tile.piece.representation}`} >
+                                        </Image>
                                     )}
                                     {/* Display Tile Column Letters */}
                                     {tile.row === 1 && (
