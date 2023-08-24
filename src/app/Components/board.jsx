@@ -47,6 +47,7 @@ const Board = () => {
 
     const [boardState, setBoardState] = useState(initialBoardState)
     const [movingPiece, setMovingPiece] = useState(null)
+    const [startTile, setStartTile] = useState(null)
 
     const board = [];
 
@@ -76,9 +77,10 @@ const Board = () => {
                     <div className="flex" key={rowIndex}>
                         {row.map((tile, columnIndex) => (
                             <div
-                                className={`relative h-10 md:h-20 w-10 md:w-20 ${tile.colour}`}
+                                className={`relative h-10 md:h-20 w-10 md:w-20 select-none ${tile.colour}`}
                                 key={`${rowIndex}-${columnIndex}`}
                                 onDragStart={((e) => {
+                                    setStartTile(tile)
                                     setMovingPiece(tile.piece)
                                 })}
                                 onDrag={((e) => {
@@ -88,13 +90,31 @@ const Board = () => {
                                     e.preventDefault()
                                 })}
                                 onDrop={((e) => {
-                                    tile.piece = movingPiece
+                                    const endTile = tile
+                                    console.log(movingPiece)
                                     const newBoard = board.map((row) => {
+                                        tile.piece = movingPiece
                                         return row.map((tile) => {
                                             return tile.piece
                                         })
                                     })
-                                    setBoardState(newBoard.reverse())
+                                    if (movingPiece.type === "pawn") {
+                                        if (movingPiece.colour === "white") {
+                                            const piece = new Pawn("white", whitePawn)
+                                            if (piece.movement(startTile, endTile)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        } else {
+                                            const piece = new Pawn("black", blackPawn)
+                                            if (piece.movement(startTile, endTile)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        }
+                                    }
                                 })}
                             >
                                 <div>

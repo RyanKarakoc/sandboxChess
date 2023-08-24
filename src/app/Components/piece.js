@@ -10,6 +10,19 @@ export class Pawn extends Piece {
     constructor(colour, representation) {
         super("pawn", colour, representation)
     }
+    movement(startTile, endTile) {
+        console.log(endTile)
+        if (startTile.row === 2 && this.colour == "white" && (endTile.row === 4 && (endTile.column === startTile.column) || endTile.row === 3 && (endTile.column === startTile.column))) {
+            console.log("1")
+            return true
+        }   else if(startTile.row === 7 && this.colour == "black" && (endTile.row === 6 || endTile.row === 5)) {
+            console.log("2")
+            return true
+        }   else {
+            console.log("3")
+            return false
+        }
+    }
 }
 
 export class Rook extends Piece {
