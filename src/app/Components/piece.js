@@ -408,58 +408,116 @@ export class Knight extends Piece {
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    if (
-      endTile.row === startTile.row + 2 &&
-      (columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) + 1 ||
+    if (this.colour === "white") {
+      if (
+        endTile.row === startTile.row + 2 &&
+        (columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(startTile.column) + 1 ||
+          columnRef.indexOf(endTile.column) ===
+            columnRef.indexOf(startTile.column) - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "black")
+      ) {
+        console.log("true");
+        return true;
+      } else if (
+        endTile.row === startTile.row - 2 &&
+        (columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(startTile.column) + 1 ||
+          columnRef.indexOf(endTile.column) ===
+            columnRef.indexOf(startTile.column) - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "black")
+      ) {
+        console.log("true");
+        return true;
+      } else if (
         columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) - 1) &&
-      (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-        null ||
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black")
-    ) {
-      console.log("true");
-      return true;
-    } else if (
-      endTile.row === startTile.row - 2 &&
-      (columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) + 1 ||
+          columnRef.indexOf(startTile.column) + 2 &&
+        (endTile.row === startTile.row + 1 ||
+          endTile.row === startTile.row - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "black")
+      ) {
+        console.log("true");
+        return true;
+      } else if (
         columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) - 1) &&
-      (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-        null ||
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black")
-    ) {
-      console.log("true");
-      return true;
-    } else if (
-      columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) + 2 &&
-      (endTile.row === startTile.row + 1 ||
-        endTile.row === startTile.row - 1) &&
-      (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-        null ||
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black")
-    ) {
-      console.log("true");
-      return true;
-    } else if (
-      columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) - 2 &&
-      (endTile.row === startTile.row + 1 ||
-        endTile.row === startTile.row - 1) &&
-      (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-        null ||
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black")
-    ) {
-      console.log("true");
-      return true;
-    } else {
-      console.log("false");
+          columnRef.indexOf(startTile.column) - 2 &&
+        (endTile.row === startTile.row + 1 ||
+          endTile.row === startTile.row - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "black")
+      ) {
+        console.log("true");
+        return true;
+      } else {
+        console.log("false");
+      }
+      return false;
+    }
+    if (this.colour === "black") {
+      if (
+        endTile.row === startTile.row + 2 &&
+        (columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(startTile.column) + 1 ||
+          columnRef.indexOf(endTile.column) ===
+            columnRef.indexOf(startTile.column) - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "white")
+      ) {
+        console.log("true");
+        return true;
+      } else if (
+        endTile.row === startTile.row - 2 &&
+        (columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(startTile.column) + 1 ||
+          columnRef.indexOf(endTile.column) ===
+            columnRef.indexOf(startTile.column) - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "white")
+      ) {
+        console.log("true");
+        return true;
+      } else if (
+        columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(startTile.column) + 2 &&
+        (endTile.row === startTile.row + 1 ||
+          endTile.row === startTile.row - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "white")
+      ) {
+        console.log("true");
+        return true;
+      } else if (
+        columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(startTile.column) - 2 &&
+        (endTile.row === startTile.row + 1 ||
+          endTile.row === startTile.row - 1) &&
+        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null ||
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour === "white")
+      ) {
+        console.log("true");
+        return true;
+      } else {
+        console.log("false");
+      }
       return false;
     }
   }
