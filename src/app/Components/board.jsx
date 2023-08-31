@@ -91,7 +91,6 @@ const Board = () => {
                                 })}
                                 onDrop={((e) => {
                                     const endTile = tile
-                                    console.log(movingPiece)
                                     const newBoard = board.map((row) => {
                                         tile.piece = movingPiece
                                         return row.map((tile) => {
@@ -101,19 +100,38 @@ const Board = () => {
                                     if (movingPiece.type === "pawn") {
                                         if (movingPiece.colour === "white") {
                                             const piece = new Pawn("white", whitePawn)
-                                            if (piece.movement(startTile, endTile)) {
+                                            if (piece.movement(startTile, endTile, boardState)) {
                                                 setBoardState(newBoard.reverse())
                                             } else {
                                                 setMovingPiece(piece)
                                             }
                                         } else {
                                             const piece = new Pawn("black", blackPawn)
-                                            if (piece.movement(startTile, endTile)) {
+                                            if (piece.movement(startTile, endTile, boardState)) {
                                                 setBoardState(newBoard.reverse())
                                             } else {
                                                 setMovingPiece(piece)
                                             }
                                         }
+                                        
+                                    }
+                                    if (movingPiece.type === "rook") {
+                                        if (movingPiece.colour === "white") {
+                                            const piece = new Rook("white", whiteRook)
+                                            if (piece.movement(startTile, endTile, boardState, )) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        } else {
+                                            const piece = new Rook("black", blackRook)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        }
+                                        
                                     }
                                 })}
                             >
