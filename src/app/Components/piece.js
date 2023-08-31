@@ -288,16 +288,24 @@ export class Rook extends Piece {
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    const column = [];
     const movingPiece = startTile;
+    const column = [];
+    const row = boardState[startTile.row - 1];
 
     for (let i = 0; i < boardState.length; i++) {
       column.push(boardState[i][columnRef.indexOf(startTile.column)]);
     }
 
     const checkNotVerticalJumping = (startTile, endTile) => {
-      const movingTiles = column.slice(startTile.row, endTile.row);
+      let movingTiles = column.slice(startTile.row, endTile.row);
       const inBetweenTiles = movingTiles.slice(0, -1);
+
+      // change moving tiles when moving negative y
+      if (startTile.row > endTile.row) {
+        movingTiles = column.slice(endTile.row - 1, startTile.row - 1);
+      }
+
+      // if all tiles are null
       const inBetweenTilesAreNull = inBetweenTiles.every((piece) => {
         return piece === null;
       });
@@ -305,8 +313,6 @@ export class Rook extends Piece {
       if (!inBetweenTilesAreNull) {
         return false;
       }
-
-      console.log(movingTiles);
 
       for (let i = 0; i < movingTiles.length; i++) {
         if (movingTiles[i] !== null) {
@@ -320,7 +326,44 @@ export class Rook extends Piece {
       return true;
     };
 
-    const checkNotHorizontalJumping = () => {};
+    const checkNotHorizontalJumping = (startTile, endTile) => {
+      let movingTiles = row.slice(
+        columnRef.indexOf(startTile.column) + 1,
+        columnRef.indexOf(endTile.column) + 1
+      );
+
+      // if moving negative x
+      if (
+        columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column)
+      ) {
+        movingTiles = row.slice(
+          columnRef.indexOf(endTile.column),
+          columnRef.indexOf(startTile.column)
+        );
+      }
+
+      const inBetweenTiles = movingTiles.slice(0, -1);
+
+      // if all tiles are null
+      const inBetweenTilesAreNull = inBetweenTiles.every((piece) => {
+        return piece === null;
+      });
+
+      if (!inBetweenTilesAreNull) {
+        return false;
+      }
+
+      for (let i = 0; i < movingTiles.length; i++) {
+        if (movingTiles[i] !== null) {
+          if (movingTiles[i].colour === movingPiece.piece.colour) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
+      return true;
+    };
 
     if (this.colour === "white") {
       // check vertical movement
@@ -330,7 +373,10 @@ export class Rook extends Piece {
       ) {
         return true;
         // check horizontal movement
-      } else if (endTile.row === startTile.row) {
+      } else if (
+        endTile.row === startTile.row &&
+        checkNotHorizontalJumping(startTile, endTile)
+      ) {
         return true;
       } else {
         return false;
