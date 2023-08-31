@@ -382,6 +382,23 @@ export class Rook extends Piece {
         return false;
       }
     }
+    if (this.colour === "black") {
+      // check vertical movement
+      if (
+        endTile.column === startTile.column &&
+        checkNotVerticalJumping(startTile, endTile, boardState)
+      ) {
+        return true;
+        // check horizontal movement
+      } else if (
+        endTile.row === startTile.row &&
+        checkNotHorizontalJumping(startTile, endTile)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 }
 
