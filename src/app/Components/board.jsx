@@ -133,6 +133,24 @@ const Board = () => {
                                         }
                                         
                                     }
+                                    if (movingPiece.type === "knight") {
+                                        if (movingPiece.colour === "white") {
+                                            const piece = new Knight("white", whiteKnight)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        } else {
+                                            const piece = new Knight("black", blackKnight)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        }
+                                        
+                                    }
                                 })}
                             >
                                 <div>
