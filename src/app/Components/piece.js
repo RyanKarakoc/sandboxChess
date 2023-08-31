@@ -19,7 +19,8 @@ export class Pawn extends Piece {
       if (
         startTile.row === 2 &&
         ((endTile.row === 3 && endTile.column === startTile.column) ||
-          (endTile.row === 4 && endTile.column === startTile.column))
+          (endTile.row === 4 && endTile.column === startTile.column)) &&
+        boardState[endTile.row - 2][columnRef.indexOf(endTile.column)] === null
       ) {
         return true;
         // straight line
@@ -151,7 +152,8 @@ export class Pawn extends Piece {
       if (
         startTile.row === 7 &&
         ((endTile.row === 6 && endTile.column === startTile.column) ||
-          (endTile.row === 5 && endTile.column === startTile.column))
+          (endTile.row === 5 && endTile.column === startTile.column)) &&
+        boardState[endTile.row][columnRef.indexOf(endTile.column)] === null
       ) {
         return true;
         // straight line
