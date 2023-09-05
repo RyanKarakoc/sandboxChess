@@ -151,6 +151,24 @@ const Board = () => {
                                         }
                                         
                                     }
+                                    if (movingPiece.type === "bishop") {
+                                        if (movingPiece.colour === "white") {
+                                            const piece = new Bishop("white", whiteBishop)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        } else {
+                                            const piece = new Bishop("black", blackBishop)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        }
+                                        
+                                    }
                                 })}
                             >
                                 <div>

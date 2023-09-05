@@ -529,6 +529,119 @@ export class Bishop extends Piece {
   constructor(colour, representation) {
     super("bishop", colour, representation);
   }
+  movement(startTile, endTile, boardState) {
+    const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const diagonal = [];
+    const movingPiece = startTile;
+
+    if (startTile.row === endTile.row) {
+      return false;
+    }
+
+    if (
+      columnRef.indexOf(startTile.column) === columnRef.indexOf(endTile.column)
+    ) {
+      return false;
+    }
+
+    if (
+      columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
+      startTile.row < endTile.row
+    ) {
+      // creating the diagonal move
+      console.log("x pos, y pos");
+      let offset = 1;
+      for (let i = 0; i < endTile.row - startTile.row; i++) {
+        diagonal.push(
+          boardState[startTile.row + i][
+            columnRef.indexOf(startTile.column) + offset
+          ]
+        );
+        offset++;
+      }
+    } else if (
+      columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
+      startTile.row > endTile.row
+    ) {
+      console.log("x pos, y neg");
+      let offset = 2;
+      for (let i = 0; i < startTile.row - endTile.row; i++) {
+        diagonal.push(
+          boardState[startTile.row - offset][
+            columnRef.indexOf(startTile.column) + 1 + i
+          ]
+        );
+        offset++;
+      }
+    } else if (
+      columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
+      startTile.row < endTile.row
+    ) {
+      console.log("x neg, y pos");
+      let offset = 1;
+      for (
+        let i = 0;
+        i <
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
+        i++
+      ) {
+        diagonal.push(
+          boardState[startTile.row + i][
+            columnRef.indexOf(startTile.column) - offset
+          ]
+        );
+        offset++;
+      }
+    } else if (
+      columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
+      startTile.row > endTile.row
+    ) {
+      console.log("x neg, y neg");
+      let offset = 1;
+      for (
+        let i = 0;
+        i <
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
+        i++
+      ) {
+        diagonal.push(
+          boardState[startTile.row - 1 - offset][
+            columnRef.indexOf(startTile.column) - offset
+          ]
+        );
+        offset++;
+      }
+    }
+
+    //removing the endtile
+    const inBetweenTiles = diagonal.slice(0, -1);
+    //all tiles inbetween
+    const inBetweenTilesAreNull = inBetweenTiles.every((piece) => {
+      return piece === null;
+    });
+    // checks jumping oposite colours
+    console.log(inBetweenTilesAreNull);
+    if (!inBetweenTilesAreNull) {
+      console.log("false");
+      return false;
+    }
+
+    for (let i = 0; i < diagonal.length; i++) {
+      console.log(diagonal);
+      if (diagonal[i] !== null) {
+        console.log("2");
+        if (diagonal[i].colour === movingPiece.piece.colour) {
+          console.log("3");
+          console.log(boardState);
+          console.log("false");
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+    return true;
+  }
 }
 
 export class Queen extends Piece {
