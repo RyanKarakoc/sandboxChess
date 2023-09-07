@@ -14,272 +14,67 @@ export class Pawn extends Piece {
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const emptyTile =
+      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null;
+    const targetTile =
+      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)];
+    const oneDiagonalSpace =
+      columnRef.indexOf(endTile.column) -
+        columnRef.indexOf(startTile.column) ===
+        1 ||
+      columnRef.indexOf(endTile.column) -
+        columnRef.indexOf(startTile.column) ===
+        -1;
+    const takingPiece =
+      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null ||
+      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)].colour !==
+        this.colour;
 
-    if (this.colour === "white") {
+    // if on row 2
+    if (startTile.row === 2) {
+      // forward 1 space
       if (
-        startTile.row === 2 &&
-        ((endTile.row === 3 && endTile.column === startTile.column) ||
-          (endTile.row === 4 && endTile.column === startTile.column)) &&
-        boardState[endTile.row - 2][columnRef.indexOf(endTile.column)] === null
+        emptyTile &&
+        endTile.row === 3 &&
+        endTile.column === startTile.column
       ) {
         return true;
-        // straight line
+        //forward 2 spaces
       } else if (
-        startTile.row === 3 &&
+        emptyTile &&
         endTile.row === 4 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
+        endTile.column === startTile.column
       ) {
         return true;
+        // if taking when on row 2
       } else if (
-        startTile.row === 4 &&
-        endTile.row === 5 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
+        !emptyTile &&
+        targetTile.colour !== this.colour &&
+        endTile.row === 3 &&
+        oneDiagonalSpace &&
+        takingPiece
       ) {
         return true;
-      } else if (
-        startTile.row === 5 &&
-        endTile.row === 6 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        startTile.row === 6 &&
-        endTile.row === 7 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        startTile.row === 7 &&
-        endTile.row === 8 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-        // taking
-      } else if (
-        startTile.row === 2 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 3 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 4 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 5 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 6 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 7 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "black"
-      ) {
-        return true;
-      } else {
-        return false;
       }
     }
-    if (this.colour === "black") {
-      if (
-        startTile.row === 7 &&
-        ((endTile.row === 6 && endTile.column === startTile.column) ||
-          (endTile.row === 5 && endTile.column === startTile.column)) &&
-        boardState[endTile.row][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-        // straight line
-      } else if (
-        startTile.row === 6 &&
-        endTile.row === 5 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        startTile.row === 5 &&
-        endTile.row === 4 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        startTile.row === 4 &&
-        endTile.row === 3 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        startTile.row === 3 &&
-        endTile.row === 2 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        startTile.row === 2 &&
-        endTile.row === 1 &&
-        endTile.column === startTile.column &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-        // taking
-      } else if (
-        startTile.row === 7 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "white"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 6 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "white"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 5 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "white"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 4 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "white"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 3 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "white"
-      ) {
-        return true;
-      } else if (
-        startTile.row === 2 &&
-        (columnRef.indexOf(endTile.column) -
-          columnRef.indexOf(startTile.column) ===
-          1 ||
-          columnRef.indexOf(startTile.column) -
-            columnRef.indexOf(endTile.column) ===
-            1) &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] !==
-          null &&
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour === "white"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+    // not row 2
+    else if (
+      emptyTile &&
+      endTile.row === startTile.row + 1 &&
+      endTile.column === startTile.column
+    ) {
+      return true;
+      //taking
+    } else if (
+      !emptyTile &&
+      targetTile.colour !== this.colour &&
+      endTile.row === startTile.row + 1 &&
+      oneDiagonalSpace &&
+      takingPiece
+    ) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
@@ -422,7 +217,6 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "black")
       ) {
-        console.log("true");
         return true;
       } else if (
         endTile.row === startTile.row - 2 &&
@@ -435,7 +229,6 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "black")
       ) {
-        console.log("true");
         return true;
       } else if (
         columnRef.indexOf(endTile.column) ===
@@ -447,7 +240,6 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "black")
       ) {
-        console.log("true");
         return true;
       } else if (
         columnRef.indexOf(endTile.column) ===
@@ -459,10 +251,8 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "black")
       ) {
-        console.log("true");
         return true;
       } else {
-        console.log("false");
       }
       return false;
     }
@@ -478,7 +268,6 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "white")
       ) {
-        console.log("true");
         return true;
       } else if (
         endTile.row === startTile.row - 2 &&
@@ -491,7 +280,6 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "white")
       ) {
-        console.log("true");
         return true;
       } else if (
         columnRef.indexOf(endTile.column) ===
@@ -503,7 +291,6 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "white")
       ) {
-        console.log("true");
         return true;
       } else if (
         columnRef.indexOf(endTile.column) ===
@@ -515,10 +302,8 @@ export class Knight extends Piece {
           boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
             .colour === "white")
       ) {
-        console.log("true");
         return true;
       } else {
-        console.log("false");
       }
       return false;
     }
