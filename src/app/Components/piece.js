@@ -30,51 +30,100 @@ export class Pawn extends Piece {
       boardState[endTile.row - 1][columnRef.indexOf(endTile.column)].colour !==
         this.colour;
 
-    // if on row 2
-    if (startTile.row === 2) {
-      // forward 1 space
-      if (
+    if (this.colour === "white") {
+      if (startTile.row === 2) {
+        // if on row 2
+        // forward 1 space
+        if (
+          emptyTile &&
+          endTile.row === 3 &&
+          endTile.column === startTile.column
+        ) {
+          return true;
+          //forward 2 spaces
+        } else if (
+          emptyTile &&
+          endTile.row === 4 &&
+          endTile.column === startTile.column
+        ) {
+          return true;
+          // if taking when on row 2
+        } else if (
+          !emptyTile &&
+          targetTile.colour !== this.colour &&
+          endTile.row === 3 &&
+          oneDiagonalSpace &&
+          takingPiece
+        ) {
+          return true;
+        }
+      }
+      // not row 2
+      else if (
         emptyTile &&
-        endTile.row === 3 &&
+        endTile.row === startTile.row + 1 &&
         endTile.column === startTile.column
       ) {
         return true;
-        //forward 2 spaces
-      } else if (
-        emptyTile &&
-        endTile.row === 4 &&
-        endTile.column === startTile.column
-      ) {
-        return true;
-        // if taking when on row 2
+        //taking
       } else if (
         !emptyTile &&
         targetTile.colour !== this.colour &&
-        endTile.row === 3 &&
+        endTile.row === startTile.row + 1 &&
         oneDiagonalSpace &&
         takingPiece
       ) {
         return true;
+      } else {
+        return false;
       }
-    }
-    // not row 2
-    else if (
-      emptyTile &&
-      endTile.row === startTile.row + 1 &&
-      endTile.column === startTile.column
-    ) {
-      return true;
-      //taking
-    } else if (
-      !emptyTile &&
-      targetTile.colour !== this.colour &&
-      endTile.row === startTile.row + 1 &&
-      oneDiagonalSpace &&
-      takingPiece
-    ) {
-      return true;
     } else {
-      return false;
+      if (startTile.row === 7) {
+        // if on row 2
+        // forward 1 space
+        if (
+          emptyTile &&
+          endTile.row === 6 &&
+          endTile.column === startTile.column
+        ) {
+          return true;
+          //forward 2 spaces
+        } else if (
+          emptyTile &&
+          endTile.row === 5 &&
+          endTile.column === startTile.column
+        ) {
+          return true;
+          // if taking when on row 2
+        } else if (
+          !emptyTile &&
+          targetTile.colour !== this.colour &&
+          endTile.row === 6 &&
+          oneDiagonalSpace &&
+          takingPiece
+        ) {
+          return true;
+        }
+      }
+      // not row 2
+      else if (
+        emptyTile &&
+        endTile.row === startTile.row - 1 &&
+        endTile.column === startTile.column
+      ) {
+        return true;
+        //taking
+      } else if (
+        !emptyTile &&
+        targetTile.colour !== this.colour &&
+        endTile.row === startTile.row - 1 &&
+        oneDiagonalSpace &&
+        takingPiece
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }
