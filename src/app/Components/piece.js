@@ -482,6 +482,168 @@ export class Queen extends Piece {
   constructor(colour, representation) {
     super("queen", colour, representation);
   }
+  movement(startTile, endTile, boardState) {
+    const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const movement = [];
+
+    // if moving diagonal
+    if (
+      columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
+      startTile.row < endTile.row
+    ) {
+      console.log("x pos, y pos");
+      let offset = 1;
+      for (let i = 0; i < endTile.row - startTile.row; i++) {
+        movement.push(
+          boardState[startTile.row + i][
+            columnRef.indexOf(startTile.column) + offset
+          ]
+        );
+        offset++;
+      }
+    } else if (
+      columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
+      startTile.row > endTile.row
+    ) {
+      console.log("x pos, y neg");
+      let offset = 2;
+      for (let i = 0; i < startTile.row - endTile.row; i++) {
+        movement.push(
+          boardState[startTile.row - offset][
+            columnRef.indexOf(startTile.column) + 1 + i
+          ]
+        );
+        offset++;
+      }
+    } else if (
+      columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
+      startTile.row < endTile.row
+    ) {
+      console.log("x neg, y pos");
+      let offset = 1;
+      for (
+        let i = 0;
+        i <
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
+        i++
+      ) {
+        movement.push(
+          boardState[startTile.row + i][
+            columnRef.indexOf(startTile.column) - offset
+          ]
+        );
+        offset++;
+      }
+    } else if (
+      columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
+      startTile.row > endTile.row
+    ) {
+      console.log("x neg, y neg");
+      let offset = 1;
+      for (
+        let i = 0;
+        i <
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
+        i++
+      ) {
+        movement.push(
+          boardState[startTile.row - 1 - offset][
+            columnRef.indexOf(startTile.column) - offset
+          ]
+        );
+        offset++;
+      }
+    }
+
+    // if moving in straight lines
+    if (
+      endTile.row === startTile.row &&
+      columnRef.indexOf(endTile.column) < columnRef.indexOf(startTile.column)
+    ) {
+      console.log("x neg");
+      for (
+        let i = 0;
+        i <
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
+        i++
+      ) {
+        const rowOffset = 1;
+        const columnOffsett = 1;
+        movement.push(
+          boardState[endTile.row - rowOffset][
+            columnRef.indexOf(startTile.column) - columnOffsett - i
+          ]
+        );
+      }
+    } else if (
+      endTile.row === startTile.row &&
+      columnRef.indexOf(endTile.column) > columnRef.indexOf(startTile.column)
+    ) {
+      console.log("x pos");
+      for (
+        let i = 0;
+        i <
+        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column);
+        i++
+      ) {
+        const rowOffset = 1;
+        const columnOffsett = 1;
+        movement.push(
+          boardState[endTile.row - rowOffset][
+            columnRef.indexOf(startTile.column) + columnOffsett + i
+          ]
+        );
+      }
+    } else if (
+      endTile.row < startTile.row &&
+      columnRef.indexOf(endTile.column) === columnRef.indexOf(startTile.column)
+    ) {
+      console.log("y neg");
+      for (let i = 0; i < startTile.row - endTile.row; i++) {
+        const rowOffset = 2;
+        movement.push(
+          boardState[startTile.row - rowOffset - i][
+            columnRef.indexOf(startTile.column)
+          ]
+        );
+      }
+    } else if (
+      endTile.row > startTile.row &&
+      columnRef.indexOf(endTile.column) === columnRef.indexOf(startTile.column)
+    ) {
+      console.log("x pos");
+      for (let i = 0; i < endTile.row - startTile.row; i++) {
+        movement.push(
+          boardState[startTile.row + i][columnRef.indexOf(startTile.column)]
+        );
+      }
+    }
+
+    //removing the endtile
+    const inBetweenTiles = movement.slice(0, -1);
+
+    //all tiles inbetween
+    const inBetweenTilesAreNull = inBetweenTiles.every((piece) => {
+      return piece === null;
+    });
+
+    // checks jumping oposite colours
+    if (!inBetweenTilesAreNull) {
+      return false;
+    }
+
+    for (let i = 0; i < movement.length; i++) {
+      if (movement[i] !== null) {
+        if (movement[i].colour === this.colour) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+
+    return true;
+  }
 }
 
 export class King extends Piece {

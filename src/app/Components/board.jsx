@@ -167,6 +167,23 @@ const Board = () => {
                                                 setMovingPiece(piece)
                                             }
                                         }
+                                    }
+                                    if (movingPiece.type === "queen") {
+                                        if (movingPiece.colour === "white") {
+                                            const piece = new Queen("white", whiteQueen)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        } else {
+                                            const piece = new Queen("black", blackQueen)
+                                            if (piece.movement(startTile, endTile, boardState)) {
+                                                setBoardState(newBoard.reverse())
+                                            } else {
+                                                setMovingPiece(piece)
+                                            }
+                                        }
                                         
                                     }
                                 })}
