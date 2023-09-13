@@ -72,6 +72,7 @@ const Board = () => {
 
     return (
         <div className="flex justify-center items-center mb-20">
+            <div className="border-4 border-solid border-black rounded-md p-10 bg-amber-200">
             <div className="border-4 border-black">
                 {board.map((row, rowIndex) => (
                     <div className="flex" key={rowIndex}>
@@ -79,6 +80,11 @@ const Board = () => {
                             <div
                                 className={`relative h-10 md:h-20 w-10 md:w-20 select-none ${tile.colour}`}
                                 key={`${rowIndex}-${columnIndex}`}
+                                onMouseDown={(e) => {
+                                    setStartTile(tile)
+                                    setMovingPiece(tile.piece)
+                                    
+                                }}
                                 onDragStart={((e) => {
                                     setStartTile(tile)
                                     setMovingPiece(tile.piece)
@@ -88,6 +94,7 @@ const Board = () => {
                                 })}
                                 onDragOver={((e) => {
                                     e.preventDefault()
+
                                 })}
                                 onDrop={((e) => {
                                     const endTile = tile
@@ -105,6 +112,7 @@ const Board = () => {
                                             } else {
                                                 setMovingPiece(piece)
                                             }
+
                                         } else {
                                             const piece = new Pawn("black", blackPawn)
                                             if (piece.movement(startTile, endTile, boardState)) {
@@ -113,12 +121,12 @@ const Board = () => {
                                                 setMovingPiece(piece)
                                             }
                                         }
-                                        
+
                                     }
                                     if (movingPiece.type === "rook") {
                                         if (movingPiece.colour === "white") {
                                             const piece = new Rook("white", whiteRook)
-                                            if (piece.movement(startTile, endTile, boardState, )) {
+                                            if (piece.movement(startTile, endTile, boardState,)) {
                                                 setBoardState(newBoard.reverse())
                                             } else {
                                                 setMovingPiece(piece)
@@ -131,7 +139,7 @@ const Board = () => {
                                                 setMovingPiece(piece)
                                             }
                                         }
-                                        
+
                                     }
                                     if (movingPiece.type === "knight") {
                                         if (movingPiece.colour === "white") {
@@ -149,7 +157,7 @@ const Board = () => {
                                                 setMovingPiece(piece)
                                             }
                                         }
-                                        
+
                                     }
                                     if (movingPiece.type === "bishop") {
                                         if (movingPiece.colour === "white") {
@@ -184,7 +192,7 @@ const Board = () => {
                                                 setMovingPiece(piece)
                                             }
                                         }
-                                        
+
                                     }
                                     if (movingPiece.type === "king") {
                                         if (movingPiece.colour === "white") {
@@ -202,11 +210,12 @@ const Board = () => {
                                                 setMovingPiece(piece)
                                             }
                                         }
-                                        
+
                                     }
                                 })}
                             >
                                 <div>
+
                                     {/* Display Pieces */}
                                     {tile.piece && (
                                         <Image
@@ -230,6 +239,7 @@ const Board = () => {
                         ))}
                     </div>
                 ))}
+            </div>
             </div>
         </div>
     );
