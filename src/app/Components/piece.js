@@ -3,12 +3,15 @@ export class Piece {
     this.type = type;
     this.colour = colour;
     this.representation = representation;
+    this.takenTile = "";
   }
 }
 
 export class Pawn extends Piece {
   constructor(colour, representation) {
     super("pawn", colour, representation);
+    this.whiteSymbol = "♙"
+    this.blackSymbol = "♟︎"
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -53,6 +56,7 @@ export class Pawn extends Piece {
           oneDiagonalSpace &&
           takingPiece
         ) {
+          this.takenTile = `x${endTile.column}`;
           return true;
         }
       }
@@ -71,6 +75,7 @@ export class Pawn extends Piece {
         oneDiagonalSpace &&
         takingPiece
       ) {
+        this.takenTile = `x${endTile.column}`;
         return true;
       } else {
         return false;
@@ -100,6 +105,7 @@ export class Pawn extends Piece {
           oneDiagonalSpace &&
           takingPiece
         ) {
+          this.takenTile = `x${endTile.column}`;
           return true;
         }
       }
@@ -118,6 +124,7 @@ export class Pawn extends Piece {
         oneDiagonalSpace &&
         takingPiece
       ) {
+        this.takenTile = `x${endTile.column}`;
         return true;
       } else {
         return false;
@@ -129,6 +136,8 @@ export class Pawn extends Piece {
 export class Rook extends Piece {
   constructor(colour, representation) {
     super("rook", colour, representation);
+    this.whiteSymbol = "♖"
+    this.blackSymbol = "♜"
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -163,6 +172,7 @@ export class Rook extends Piece {
           if (movingTiles[i].colour === movingPiece.piece.colour) {
             return false;
           } else {
+            this.takenTile = `x${endTile.column}`;
             return true;
           }
         }
@@ -202,6 +212,7 @@ export class Rook extends Piece {
           if (movingTiles[i].colour === movingPiece.piece.colour) {
             return false;
           } else {
+            this.takenTile = `x${endTile.column}`;
             return true;
           }
         }
@@ -249,6 +260,8 @@ export class Rook extends Piece {
 export class Knight extends Piece {
   constructor(colour, representation) {
     super("knight", colour, representation);
+    this.whiteSymbol = "♘"
+    this.blackSymbol = "♞"
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -360,6 +373,8 @@ export class Knight extends Piece {
 export class Bishop extends Piece {
   constructor(colour, representation) {
     super("bishop", colour, representation);
+    this.whiteSymbol = "♗"
+    this.blackSymbol = "♝"
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -468,6 +483,8 @@ export class Bishop extends Piece {
 export class Queen extends Piece {
   constructor(colour, representation) {
     super("queen", colour, representation);
+    this.whiteSymbol = "♕"
+    this.blackSymbol = "♛"
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -628,6 +645,8 @@ export class Queen extends Piece {
 export class King extends Piece {
   constructor(colour, representation) {
     super("king", colour, representation);
+    this.whiteSymbol = "♔"
+    this.blackSymbol = "♚"
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
