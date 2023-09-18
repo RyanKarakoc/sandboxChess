@@ -10,9 +10,9 @@ export default function Page() {
   return (
     <>
       <Header />
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <Board moves={moves} setMoves={setMoves} />
-        <div className="mx-10">
+        <div className="mx-10 ">
           <MoveList moves={moves} setMoves={setMoves} />
         </div>
       </div>
