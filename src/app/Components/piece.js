@@ -816,6 +816,7 @@ export class King extends Piece {
         if (movement[i].colour === this.colour) {
           return false;
         } else {
+          this.takenTile = `x${endTile.column}`;
           return true;
         }
       }
