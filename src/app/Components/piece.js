@@ -472,6 +472,7 @@ export class Bishop extends Piece {
         if (diagonal[i].colour === movingPiece.piece.colour) {
           return false;
         } else {
+          this.takenTile = `x${endTile.column}`;
           return true;
         }
       }

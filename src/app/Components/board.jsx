@@ -151,7 +151,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -171,7 +171,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.blackSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -193,7 +193,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -213,7 +213,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.blackSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -235,7 +235,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -255,7 +255,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.blackSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -277,7 +277,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -297,7 +297,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.blackSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -319,7 +319,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -339,7 +339,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.blackSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -361,7 +361,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
@@ -381,7 +381,7 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.blackSymbol,
-                              piece.takenTile || startTile.column,
+                              piece.takenTile || endTile.column,
                               endTile.row,
                             ],
                           ]);
