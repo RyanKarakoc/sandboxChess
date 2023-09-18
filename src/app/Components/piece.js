@@ -10,8 +10,8 @@ export class Piece {
 export class Pawn extends Piece {
   constructor(colour, representation) {
     super("pawn", colour, representation);
-    this.whiteSymbol = "♙"
-    this.blackSymbol = "♟︎"
+    this.whiteSymbol = "♙";
+    this.blackSymbol = "♟︎";
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -136,8 +136,8 @@ export class Pawn extends Piece {
 export class Rook extends Piece {
   constructor(colour, representation) {
     super("rook", colour, representation);
-    this.whiteSymbol = "♖"
-    this.blackSymbol = "♜"
+    this.whiteSymbol = "♖";
+    this.blackSymbol = "♜";
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -260,8 +260,8 @@ export class Rook extends Piece {
 export class Knight extends Piece {
   constructor(colour, representation) {
     super("knight", colour, representation);
-    this.whiteSymbol = "♘"
-    this.blackSymbol = "♞"
+    this.whiteSymbol = "♘";
+    this.blackSymbol = "♞";
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -373,8 +373,8 @@ export class Knight extends Piece {
 export class Bishop extends Piece {
   constructor(colour, representation) {
     super("bishop", colour, representation);
-    this.whiteSymbol = "♗"
-    this.blackSymbol = "♝"
+    this.whiteSymbol = "♗";
+    this.blackSymbol = "♝";
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -391,11 +391,16 @@ export class Bishop extends Piece {
       return false;
     }
 
+    // creating the diagonal move
     if (
+      // x pos y pos
       columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-      startTile.row < endTile.row
+      startTile.row < endTile.row &&
+      endTile.row - startTile.row ===
+        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
     ) {
-      // creating the diagonal move
+      console.log("x pos, y pos");
+
       let offset = 1;
       for (let i = 0; i < endTile.row - startTile.row; i++) {
         diagonal.push(
@@ -406,9 +411,13 @@ export class Bishop extends Piece {
         offset++;
       }
     } else if (
+      //x pos y neg
       columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-      startTile.row > endTile.row
+      startTile.row > endTile.row &&
+      startTile.row - endTile.row ===
+        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
     ) {
+      console.log("x pos, y neg");
       let offset = 2;
       for (let i = 0; i < startTile.row - endTile.row; i++) {
         diagonal.push(
@@ -419,9 +428,13 @@ export class Bishop extends Piece {
         offset++;
       }
     } else if (
+      // x neg y pos
       columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-      startTile.row < endTile.row
+      startTile.row < endTile.row &&
+      endTile.row - startTile.row ===
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
     ) {
+      console.log("x neg, y pos");
       let offset = 1;
       for (
         let i = 0;
@@ -437,9 +450,13 @@ export class Bishop extends Piece {
         offset++;
       }
     } else if (
+      // x neg y neg
       columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-      startTile.row > endTile.row
+      startTile.row > endTile.row &&
+      startTile.row - endTile.row ===
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
     ) {
+      console.log("x neg, y neg");
       let offset = 1;
       for (
         let i = 0;
@@ -467,6 +484,10 @@ export class Bishop extends Piece {
       return false;
     }
 
+    if (diagonal.length === 0) {
+      return false;
+    }
+
     for (let i = 0; i < diagonal.length; i++) {
       if (diagonal[i] !== null) {
         if (diagonal[i].colour === movingPiece.piece.colour) {
@@ -483,8 +504,8 @@ export class Bishop extends Piece {
 export class Queen extends Piece {
   constructor(colour, representation) {
     super("queen", colour, representation);
-    this.whiteSymbol = "♕"
-    this.blackSymbol = "♛"
+    this.whiteSymbol = "♕";
+    this.blackSymbol = "♛";
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -492,8 +513,11 @@ export class Queen extends Piece {
 
     // if moving diagonal
     if (
+      // x pos y pos
       columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-      startTile.row < endTile.row
+      startTile.row < endTile.row &&
+      endTile.row - startTile.row ===
+        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
     ) {
       let offset = 1;
       for (let i = 0; i < endTile.row - startTile.row; i++) {
@@ -505,8 +529,11 @@ export class Queen extends Piece {
         offset++;
       }
     } else if (
+      //x pos y neg
       columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-      startTile.row > endTile.row
+      startTile.row > endTile.row &&
+      startTile.row - endTile.row ===
+        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
     ) {
       let offset = 2;
       for (let i = 0; i < startTile.row - endTile.row; i++) {
@@ -518,8 +545,11 @@ export class Queen extends Piece {
         offset++;
       }
     } else if (
+      // x neg y pos
       columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-      startTile.row < endTile.row
+      startTile.row < endTile.row &&
+      endTile.row - startTile.row ===
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
     ) {
       let offset = 1;
       for (
@@ -536,8 +566,11 @@ export class Queen extends Piece {
         offset++;
       }
     } else if (
+      // x neg y neg
       columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-      startTile.row > endTile.row
+      startTile.row > endTile.row &&
+      startTile.row - endTile.row ===
+        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
     ) {
       let offset = 1;
       for (
@@ -628,6 +661,10 @@ export class Queen extends Piece {
       return false;
     }
 
+    if (movement.length === 0) {
+      return false;
+    }
+
     for (let i = 0; i < movement.length; i++) {
       if (movement[i] !== null) {
         if (movement[i].colour === this.colour) {
@@ -645,8 +682,8 @@ export class Queen extends Piece {
 export class King extends Piece {
   constructor(colour, representation) {
     super("king", colour, representation);
-    this.whiteSymbol = "♔"
-    this.blackSymbol = "♚"
+    this.whiteSymbol = "♔";
+    this.blackSymbol = "♚";
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
