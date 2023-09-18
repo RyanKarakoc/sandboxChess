@@ -244,107 +244,107 @@ export class Knight extends Piece {
   }
   movement(startTile, endTile, boardState) {
     const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    if (this.colour === "white") {
+
+    // x pos
+    if (endTile.row === startTile.row + 2) {
+      console.log("1");
       if (
-        endTile.row === startTile.row + 2 &&
-        (columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 1 ||
-          columnRef.indexOf(endTile.column) ===
-            columnRef.indexOf(startTile.column) - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "black")
-      ) {
-        return true;
-      } else if (
-        endTile.row === startTile.row - 2 &&
-        (columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 1 ||
-          columnRef.indexOf(endTile.column) ===
-            columnRef.indexOf(startTile.column) - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "black")
-      ) {
-        return true;
-      } else if (
         columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 2 &&
-        (endTile.row === startTile.row + 1 ||
-          endTile.row === startTile.row - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "black")
-      ) {
-        return true;
-      } else if (
+          columnRef.indexOf(startTile.column) + 1 ||
         columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) - 2 &&
-        (endTile.row === startTile.row + 1 ||
-          endTile.row === startTile.row - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "black")
+          columnRef.indexOf(startTile.column) - 1
       ) {
-        return true;
-      } else {
+        console.log("2");
+
+        if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null
+        ) {
+          return true;
+        } else if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour !== this.colour
+        ) {
+          this.takenTile = `x${endTile.column}`;
+          return true;
+        } else {
+          return false;
+        }
       }
-      return false;
     }
-    if (this.colour === "black") {
+    // x neg
+    else if (endTile.row === startTile.row - 2) {
       if (
-        endTile.row === startTile.row + 2 &&
-        (columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 1 ||
-          columnRef.indexOf(endTile.column) ===
-            columnRef.indexOf(startTile.column) - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "white")
-      ) {
-        return true;
-      } else if (
-        endTile.row === startTile.row - 2 &&
-        (columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 1 ||
-          columnRef.indexOf(endTile.column) ===
-            columnRef.indexOf(startTile.column) - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "white")
-      ) {
-        return true;
-      } else if (
         columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 2 &&
-        (endTile.row === startTile.row + 1 ||
-          endTile.row === startTile.row - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "white")
-      ) {
-        return true;
-      } else if (
+          columnRef.indexOf(startTile.column) + 1 ||
         columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) - 2 &&
-        (endTile.row === startTile.row + 1 ||
-          endTile.row === startTile.row - 1) &&
-        (boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null ||
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour === "white")
+          columnRef.indexOf(startTile.column) - 1
       ) {
-        return true;
-      } else {
+        if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null
+        ) {
+          return true;
+        } else if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour !== this.colour
+        ) {
+          this.takenTile = `x${endTile.column}`;
+          return true;
+        } else {
+          return false;
+        }
       }
-      return false;
+    }
+    //  y pos
+    else if (
+      columnRef.indexOf(endTile.column) ===
+      columnRef.indexOf(startTile.column) + 2
+    ) {
+      if (
+        endTile.row === startTile.row + 1 ||
+        endTile.row === startTile.row - 1
+      ) {
+        if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null
+        ) {
+          return true;
+        } else if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour !== this.colour
+        ) {
+          this.takenTile = `x${endTile.column}`;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    // y neg
+    else if (
+      columnRef.indexOf(endTile.column) ===
+      columnRef.indexOf(startTile.column) - 2
+    ) {
+      if (
+        endTile.row === startTile.row + 1 ||
+        endTile.row === startTile.row - 1
+      ) {
+        if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
+          null
+        ) {
+          return true;
+        } else if (
+          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
+            .colour !== this.colour
+        ) {
+          this.takenTile = `x${endTile.column}`;
+          return true;
+        } else {
+          return false;
+        }
+      }
     }
   }
 }
