@@ -224,11 +224,14 @@ export class Rook extends Piece {
         if (movement[i].colour === this.colour) {
           return false;
         } else {
+          this.takenTile = `x${endTile.column}`;
+          console.log("1");
           return true;
         }
       }
     }
 
+    console.log("2");
     return true;
   }
 }
