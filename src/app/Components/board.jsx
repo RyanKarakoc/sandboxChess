@@ -396,7 +396,7 @@ const Board = ({ moves, setMoves }) => {
                     {/* Display Pieces */}
                     {tile.piece && (
                       <Image
-                        className={`absolute inset-0 flex items-center justify-center w-fit select-none`}
+                        className={`absolute inset-0 flex items-center justify-center w-fit select-none cursor-grabbing`}
                         src={tile.piece.representation}
                         alt={`${tile.piece.color} ${tile.piece.representation}`}
                       ></Image>
