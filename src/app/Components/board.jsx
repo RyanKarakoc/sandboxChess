@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Pawn, Rook, Knight, Bishop, Queen, King } from "./piece.js";
 import blackPawn from "../../../public/blackPieces/pawn.png";
@@ -83,6 +83,7 @@ const Board = ({ moves, setMoves }) => {
   const [movingPiece, setMovingPiece] = useState(null);
   const [startTile, setStartTile] = useState(null);
   const [alternateMove, setAlternateMove] = useState(1);
+  const [sound, setSound] = useState();
 
   const board = [];
 
@@ -137,13 +138,20 @@ const Board = ({ moves, setMoves }) => {
                         return tile.piece;
                       });
                     });
+
                     if (movingPiece.type === "pawn") {
                       if (movingPiece.colour === "white") {
                         const piece = new Pawn("white", whitePawn);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            setSound
+                          ) &&
                           alternateMove % 2 === 1
                         ) {
+                          piece.playSound(endTile, boardState);
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
                           setMoves((prevMoves) => [
@@ -161,9 +169,15 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new Pawn("black", blackPawn);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            setSound
+                          ) &&
                           alternateMove % 2 === 0
                         ) {
+                          piece.playSound(endTile, boardState);
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
                           setMoves((prevMoves) => [
@@ -390,6 +404,8 @@ const Board = ({ moves, setMoves }) => {
                         }
                       }
                     }
+
+                    // setSoundState(move);
                   }}
                 >
                   <div>

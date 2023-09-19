@@ -4,6 +4,11 @@ export class Piece {
     this.colour = colour;
     this.representation = representation;
     this.takenTile = "";
+    this.moveSound = require("../../../public/sounds/move.mp3");
+    this.captureSound = require("../../../public/sounds/capture.mp3");
+    this.castleSound = require("../../../public/sounds/castle.mp3");
+    this.checkSound = require("../../../public/sounds/check.mp3");
+    this.columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   }
 }
 
@@ -129,6 +134,23 @@ export class Pawn extends Piece {
       } else {
         return false;
       }
+    }
+  }
+  playSound(endTile, boardState) {
+    let audio = new Audio(this.moveSound);
+    if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
+      null
+    ) {
+      audio.play();
+    } else if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] !==
+        null &&
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)]
+        .colour !== this.colour
+    ) {
+      audio = new Audio(this.captureSound);
+      audio.play();
     }
   }
 }
