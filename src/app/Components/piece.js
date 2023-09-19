@@ -256,6 +256,23 @@ export class Rook extends Piece {
     console.log("2");
     return true;
   }
+  playSound(endTile, boardState) {
+    let audio = new Audio(this.moveSound);
+    if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
+      null
+    ) {
+      audio.play();
+    } else if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] !==
+        null &&
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)]
+        .colour !== this.colour
+    ) {
+      audio = new Audio(this.captureSound);
+      audio.play();
+    }
+  }
 }
 
 export class Knight extends Piece {
@@ -367,6 +384,23 @@ export class Knight extends Piece {
           return false;
         }
       }
+    }
+  }
+  playSound(endTile, boardState) {
+    let audio = new Audio(this.moveSound);
+    if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
+      null
+    ) {
+      audio.play();
+    } else if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] !==
+        null &&
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)]
+        .colour !== this.colour
+    ) {
+      audio = new Audio(this.captureSound);
+      audio.play();
     }
   }
 }
@@ -500,6 +534,23 @@ export class Bishop extends Piece {
       }
     }
     return true;
+  }
+  playSound(endTile, boardState) {
+    let audio = new Audio(this.moveSound);
+    if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
+      null
+    ) {
+      audio.play();
+    } else if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] !==
+        null &&
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)]
+        .colour !== this.colour
+    ) {
+      audio = new Audio(this.captureSound);
+      audio.play();
+    }
   }
 }
 
@@ -680,6 +731,23 @@ export class Queen extends Piece {
 
     return true;
   }
+  playSound(endTile, boardState) {
+    let audio = new Audio(this.moveSound);
+    if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
+      null
+    ) {
+      audio.play();
+    } else if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] !==
+        null &&
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)]
+        .colour !== this.colour
+    ) {
+      audio = new Audio(this.captureSound);
+      audio.play();
+    }
+  }
 }
 
 export class King extends Piece {
@@ -845,5 +913,22 @@ export class King extends Piece {
     }
 
     return true;
+  }
+  playSound(endTile, boardState) {
+    let audio = new Audio(this.moveSound);
+    if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
+      null
+    ) {
+      audio.play();
+    } else if (
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] !==
+        null &&
+      boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)]
+        .colour !== this.colour
+    ) {
+      audio = new Audio(this.captureSound);
+      audio.play();
+    }
   }
 }
