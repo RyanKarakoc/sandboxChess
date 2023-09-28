@@ -2,7 +2,17 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-import { Pawn, Rook, Knight, Bishop, Queen, King } from "./piece.js";
+// import { Pawn, Rook, Knight, Bishop, Queen, King } from "./piece.js";
+
+const {
+  Pawn,
+  Rook,
+  Knight,
+  Bishop,
+  Queen,
+  King,
+} = require("../Components/piece.js");
+
 import blackPawn from "../../../public/blackPieces/pawn.png";
 import blackRook from "../../../public/blackPieces/rook.png";
 import blackKnight from "../../../public/blackPieces/knight.png";
@@ -31,51 +41,65 @@ class Tile {
   }
 }
 
+const whitePawnInstance = new Pawn("white", whitePawn);
+const whiteRookInstance = new Rook("white", whiteRook);
+const whiteKnightInstance = new Knight("white", whiteKnight);
+const whiteBishopInstance = new Bishop("white", whiteBishop);
+const whiteQueenInstance = new Queen("white", whiteQueen);
+const whiteKingInstance = new King("white", whiteKing);
+
+const blackPawnInstance = new Pawn("black", blackPawn);
+const blackRookInstance = new Rook("black", blackRook);
+const blackKnightInstance = new Knight("black", blackKnight);
+const blackBishopInstance = new Bishop("black", blackBishop);
+const blackQueenInstance = new Queen("black", blackQueen);
+const blackKingInstance = new King("black", blackKing);
+
 const Board = ({ moves, setMoves }) => {
   const initialBoardState = [
     [
-      new Rook("white", whiteRook),
-      new Knight("white", whiteKnight),
-      new Bishop("white", whiteBishop),
-      new Queen("white", whiteQueen),
-      new King("white", whiteKing),
-      new Bishop("white", whiteBishop),
-      new Knight("white", whiteKnight),
-      new Rook("white", whiteRook),
+      whiteRookInstance,
+      whiteKnightInstance,
+      whiteBishopInstance,
+      whiteQueenInstance,
+      whiteKingInstance,
+      whiteBishopInstance,
+      whiteKnightInstance,
+      whiteRookInstance,
     ],
     [
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
-      new Pawn("white", whitePawn),
+      whitePawnInstance,
+      whitePawnInstance,
+      whitePawnInstance,
+      whitePawnInstance,
+      whitePawnInstance,
+      whitePawnInstance,
+      whitePawnInstance,
+      whitePawnInstance,
     ],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
-      new Pawn("black", blackPawn),
+      blackPawnInstance,
+      blackPawnInstance,
+      blackPawnInstance,
+      blackPawnInstance,
+      blackPawnInstance,
+      blackPawnInstance,
+      blackPawnInstance,
+      blackPawnInstance,
     ],
     [
-      new Rook("black", blackRook),
-      new Knight("black", blackKnight),
-      new Bishop("black", blackBishop),
-      new Queen("black", blackQueen),
-      new King("black", blackKing),
-      new Bishop("black", blackBishop),
-      new Knight("black", blackKnight),
-      new Rook("black", blackRook),
+      blackRookInstance,
+      blackKnightInstance,
+      blackBishopInstance,
+      blackQueenInstance,
+      blackKingInstance,
+      blackBishopInstance,
+      blackKnightInstance,
+      blackRookInstance,
     ],
   ];
 
@@ -414,7 +438,6 @@ const Board = ({ moves, setMoves }) => {
                         }
                       }
                     }
-
                     // setSoundState(move);
                   }}
                 >
