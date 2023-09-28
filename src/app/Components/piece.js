@@ -1,140 +1,34 @@
-export class Piece {
+const {
+  loadMoveSound,
+  loadCaptureSound,
+  loadCastleSound,
+  loadCheckSound,
+} = require("../../../audioLoader.js");
+
+const { checkPawnMovement } = require("./utils.js");
+
+class Piece {
   constructor(type, colour, representation) {
     this.type = type;
     this.colour = colour;
     this.representation = representation;
     this.takenTile = "";
-    this.moveSound = require("../../../public/sounds/move.mp3");
-    this.captureSound = require("../../../public/sounds/capture.mp3");
-    this.castleSound = require("../../../public/sounds/castle.mp3");
-    this.checkSound = require("../../../public/sounds/check.mp3");
+    this.moveSound = loadMoveSound();
+    this.captureSound = loadCaptureSound();
+    this.castleSound = loadCastleSound();
+    this.checkSound = loadCheckSound();
     this.columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   }
 }
 
-export class Pawn extends Piece {
+class Pawn extends Piece {
   constructor(colour, representation) {
     super("pawn", colour, representation);
     this.whiteSymbol = "♙";
     this.blackSymbol = "♟︎";
   }
-  movement(startTile, endTile, boardState) {
-    const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    const emptyTile =
-      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null;
-    const targetTile =
-      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)];
-    const oneDiagonalSpace =
-      columnRef.indexOf(endTile.column) -
-        columnRef.indexOf(startTile.column) ===
-        1 ||
-      columnRef.indexOf(endTile.column) -
-        columnRef.indexOf(startTile.column) ===
-        -1;
-    const takingPiece =
-      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null ||
-      boardState[endTile.row - 1][columnRef.indexOf(endTile.column)].colour !==
-        this.colour;
-
-    if (this.colour === "white") {
-      if (startTile.row === 2) {
-        // if on row 2
-        // forward 1 space
-        if (
-          emptyTile &&
-          endTile.row === 3 &&
-          endTile.column === startTile.column
-        ) {
-          return true;
-          //forward 2 spaces
-        } else if (
-          emptyTile &&
-          endTile.row === 4 &&
-          endTile.column === startTile.column
-        ) {
-          return true;
-          // if taking when on row 2
-        } else if (
-          !emptyTile &&
-          targetTile.colour !== this.colour &&
-          endTile.row === 3 &&
-          oneDiagonalSpace &&
-          takingPiece
-        ) {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        }
-      }
-      // not row 2
-      else if (
-        emptyTile &&
-        endTile.row === startTile.row + 1 &&
-        endTile.column === startTile.column
-      ) {
-        return true;
-        //taking
-      } else if (
-        !emptyTile &&
-        targetTile.colour !== this.colour &&
-        endTile.row === startTile.row + 1 &&
-        oneDiagonalSpace &&
-        takingPiece
-      ) {
-        this.takenTile = `x${endTile.column}`;
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      if (startTile.row === 7) {
-        // if on row 2
-        // forward 1 space
-        if (
-          emptyTile &&
-          endTile.row === 6 &&
-          endTile.column === startTile.column
-        ) {
-          return true;
-          //forward 2 spaces
-        } else if (
-          emptyTile &&
-          endTile.row === 5 &&
-          endTile.column === startTile.column
-        ) {
-          return true;
-          // if taking when on row 2
-        } else if (
-          !emptyTile &&
-          targetTile.colour !== this.colour &&
-          endTile.row === 6 &&
-          oneDiagonalSpace &&
-          takingPiece
-        ) {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        }
-      }
-      // not row 2
-      else if (
-        emptyTile &&
-        endTile.row === startTile.row - 1 &&
-        endTile.column === startTile.column
-      ) {
-        return true;
-        //taking
-      } else if (
-        !emptyTile &&
-        targetTile.colour !== this.colour &&
-        endTile.row === startTile.row - 1 &&
-        oneDiagonalSpace &&
-        takingPiece
-      ) {
-        this.takenTile = `x${endTile.column}`;
-        return true;
-      } else {
-        return false;
-      }
-    }
+  movement(startTile, endTile, boardState, colour) {
+    return checkPawnMovement(startTile, endTile, boardState, colour);
   }
   playSound(endTile, boardState) {
     let audio = new Audio(this.moveSound);
@@ -150,12 +44,13 @@ export class Pawn extends Piece {
         .colour !== this.colour
     ) {
       audio = new Audio(this.captureSound);
+      this.takenTile = `x${endTile.column}`;
       audio.play();
     }
   }
 }
 
-export class Rook extends Piece {
+class Rook extends Piece {
   constructor(colour, representation) {
     super("rook", colour, representation);
     this.whiteSymbol = "♖";
@@ -275,7 +170,7 @@ export class Rook extends Piece {
   }
 }
 
-export class Knight extends Piece {
+class Knight extends Piece {
   constructor(colour, representation) {
     super("knight", colour, representation);
     this.whiteSymbol = "♘";
@@ -405,7 +300,7 @@ export class Knight extends Piece {
   }
 }
 
-export class Bishop extends Piece {
+class Bishop extends Piece {
   constructor(colour, representation) {
     super("bishop", colour, representation);
     this.whiteSymbol = "♗";
@@ -554,7 +449,7 @@ export class Bishop extends Piece {
   }
 }
 
-export class Queen extends Piece {
+class Queen extends Piece {
   constructor(colour, representation) {
     super("queen", colour, representation);
     this.whiteSymbol = "♕";
@@ -750,7 +645,7 @@ export class Queen extends Piece {
   }
 }
 
-export class King extends Piece {
+class King extends Piece {
   constructor(colour, representation) {
     super("king", colour, representation);
     this.whiteSymbol = "♔";
@@ -932,3 +827,5 @@ export class King extends Piece {
     }
   }
 }
+
+module.exports = { Pawn, Rook, Knight, Bishop, Queen, King };
