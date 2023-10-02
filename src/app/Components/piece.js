@@ -5,7 +5,11 @@ const {
   loadCheckSound,
 } = require("../../../audioLoader.js");
 
-const { checkPawnMovement } = require("./utils.js");
+const {
+  checkPawnMovement,
+  checkRookMovement,
+  checkKnightMovement,
+} = require("./utils.js");
 
 class Piece {
   constructor(type, colour, representation) {
@@ -56,100 +60,8 @@ class Rook extends Piece {
     this.whiteSymbol = "♖";
     this.blackSymbol = "♜";
   }
-  movement(startTile, endTile, boardState) {
-    const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    const movement = [];
-
-    if (
-      endTile.row === startTile.row &&
-      columnRef.indexOf(endTile.column) < columnRef.indexOf(startTile.column)
-    ) {
-      for (
-        let i = 0;
-        i <
-        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
-        i++
-      ) {
-        const rowOffset = 1;
-        const columnOffsett = 1;
-        movement.push(
-          boardState[endTile.row - rowOffset][
-            columnRef.indexOf(startTile.column) - columnOffsett - i
-          ]
-        );
-      }
-    } else if (
-      endTile.row === startTile.row &&
-      columnRef.indexOf(endTile.column) > columnRef.indexOf(startTile.column)
-    ) {
-      for (
-        let i = 0;
-        i <
-        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column);
-        i++
-      ) {
-        const rowOffset = 1;
-        const columnOffsett = 1;
-        movement.push(
-          boardState[endTile.row - rowOffset][
-            columnRef.indexOf(startTile.column) + columnOffsett + i
-          ]
-        );
-      }
-    } else if (
-      endTile.row < startTile.row &&
-      columnRef.indexOf(endTile.column) === columnRef.indexOf(startTile.column)
-    ) {
-      for (let i = 0; i < startTile.row - endTile.row; i++) {
-        const rowOffset = 2;
-        movement.push(
-          boardState[startTile.row - rowOffset - i][
-            columnRef.indexOf(startTile.column)
-          ]
-        );
-      }
-    } else if (
-      endTile.row > startTile.row &&
-      columnRef.indexOf(endTile.column) === columnRef.indexOf(startTile.column)
-    ) {
-      for (let i = 0; i < endTile.row - startTile.row; i++) {
-        movement.push(
-          boardState[startTile.row + i][columnRef.indexOf(startTile.column)]
-        );
-      }
-    }
-
-    //removing the endtile
-    const inBetweenTiles = movement.slice(0, -1);
-
-    //all tiles inbetween
-    const inBetweenTilesAreNull = inBetweenTiles.every((piece) => {
-      return piece === null;
-    });
-
-    // checks jumping oposite colours
-    if (!inBetweenTilesAreNull) {
-      return false;
-    }
-
-    if (movement.length === 0) {
-      return false;
-    }
-
-    for (let i = 0; i < movement.length; i++) {
-      if (movement[i] !== null) {
-        if (movement[i].colour === this.colour) {
-          return false;
-        } else {
-          this.takenTile = `x${endTile.column}`;
-          console.log("1");
-          return true;
-        }
-      }
-    }
-
-    console.log("2");
-    return true;
+  movement(startTile, endTile, boardState, colour) {
+    return checkRookMovement(startTile, endTile, boardState, colour);
   }
   playSound(endTile, boardState) {
     let audio = new Audio(this.moveSound);
@@ -165,6 +77,7 @@ class Rook extends Piece {
         .colour !== this.colour
     ) {
       audio = new Audio(this.captureSound);
+      this.takenTile = `x${endTile.column}`;
       audio.play();
     }
   }
@@ -176,110 +89,8 @@ class Knight extends Piece {
     this.whiteSymbol = "♘";
     this.blackSymbol = "♞";
   }
-  movement(startTile, endTile, boardState) {
-    const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-
-    // x pos
-    if (endTile.row === startTile.row + 2) {
-      console.log("1");
-      if (
-        columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 1 ||
-        columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) - 1
-      ) {
-        console.log("2");
-
-        if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null
-        ) {
-          return true;
-        } else if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour !== this.colour
-        ) {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    // x neg
-    else if (endTile.row === startTile.row - 2) {
-      if (
-        columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) + 1 ||
-        columnRef.indexOf(endTile.column) ===
-          columnRef.indexOf(startTile.column) - 1
-      ) {
-        if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null
-        ) {
-          return true;
-        } else if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour !== this.colour
-        ) {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    //  y pos
-    else if (
-      columnRef.indexOf(endTile.column) ===
-      columnRef.indexOf(startTile.column) + 2
-    ) {
-      if (
-        endTile.row === startTile.row + 1 ||
-        endTile.row === startTile.row - 1
-      ) {
-        if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null
-        ) {
-          return true;
-        } else if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour !== this.colour
-        ) {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    // y neg
-    else if (
-      columnRef.indexOf(endTile.column) ===
-      columnRef.indexOf(startTile.column) - 2
-    ) {
-      if (
-        endTile.row === startTile.row + 1 ||
-        endTile.row === startTile.row - 1
-      ) {
-        if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] ===
-          null
-        ) {
-          return true;
-        } else if (
-          boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-            .colour !== this.colour
-        ) {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
+  movement(startTile, endTile, boardState, colour) {
+    return checkKnightMovement(startTile, endTile, boardState, colour);
   }
   playSound(endTile, boardState) {
     let audio = new Audio(this.moveSound);

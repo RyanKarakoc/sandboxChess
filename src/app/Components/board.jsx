@@ -207,7 +207,12 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new Rook("white", whiteRook);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 1
                         ) {
                           piece.playSound(endTile, boardState);
@@ -228,7 +233,12 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new Rook("black", blackRook);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            colour
+                          ) &&
                           alternateMove % 2 === 0
                         ) {
                           piece.playSound(endTile, boardState);
@@ -251,7 +261,12 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new Knight("white", whiteKnight);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 1
                         ) {
                           piece.playSound(endTile, boardState);
@@ -272,7 +287,12 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new Knight("black", blackKnight);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 0
                         ) {
                           piece.playSound(endTile, boardState);
