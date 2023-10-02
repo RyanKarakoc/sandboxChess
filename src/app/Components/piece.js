@@ -9,6 +9,7 @@ const {
   checkPawnMovement,
   checkRookMovement,
   checkKnightMovement,
+  checkBishopMovement,
 } = require("./utils.js");
 
 class Piece {
@@ -117,129 +118,8 @@ class Bishop extends Piece {
     this.whiteSymbol = "♗";
     this.blackSymbol = "♝";
   }
-  movement(startTile, endTile, boardState) {
-    const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    const diagonal = [];
-    const movingPiece = startTile;
-
-    if (startTile.row === endTile.row) {
-      return false;
-    }
-
-    if (
-      columnRef.indexOf(startTile.column) === columnRef.indexOf(endTile.column)
-    ) {
-      return false;
-    }
-
-    // creating the diagonal move
-    if (
-      // x pos y pos
-      columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-      startTile.row < endTile.row &&
-      endTile.row - startTile.row ===
-        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
-    ) {
-      console.log("x pos, y pos");
-
-      let offset = 1;
-      for (let i = 0; i < endTile.row - startTile.row; i++) {
-        diagonal.push(
-          boardState[startTile.row + i][
-            columnRef.indexOf(startTile.column) + offset
-          ]
-        );
-        offset++;
-      }
-    } else if (
-      //x pos y neg
-      columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-      startTile.row > endTile.row &&
-      startTile.row - endTile.row ===
-        columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
-    ) {
-      console.log("x pos, y neg");
-      let offset = 2;
-      for (let i = 0; i < startTile.row - endTile.row; i++) {
-        diagonal.push(
-          boardState[startTile.row - offset][
-            columnRef.indexOf(startTile.column) + 1 + i
-          ]
-        );
-        offset++;
-      }
-    } else if (
-      // x neg y pos
-      columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-      startTile.row < endTile.row &&
-      endTile.row - startTile.row ===
-        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
-    ) {
-      console.log("x neg, y pos");
-      let offset = 1;
-      for (
-        let i = 0;
-        i <
-        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
-        i++
-      ) {
-        diagonal.push(
-          boardState[startTile.row + i][
-            columnRef.indexOf(startTile.column) - offset
-          ]
-        );
-        offset++;
-      }
-    } else if (
-      // x neg y neg
-      columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-      startTile.row > endTile.row &&
-      startTile.row - endTile.row ===
-        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
-    ) {
-      console.log("x neg, y neg");
-      let offset = 1;
-      for (
-        let i = 0;
-        i <
-        columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column);
-        i++
-      ) {
-        diagonal.push(
-          boardState[startTile.row - 1 - offset][
-            columnRef.indexOf(startTile.column) - offset
-          ]
-        );
-        offset++;
-      }
-    }
-
-    //removing the endtile
-    const inBetweenTiles = diagonal.slice(0, -1);
-    //all tiles inbetween
-    const inBetweenTilesAreNull = inBetweenTiles.every((piece) => {
-      return piece === null;
-    });
-    // checks jumping oposite colours
-    if (!inBetweenTilesAreNull) {
-      return false;
-    }
-
-    if (diagonal.length === 0) {
-      return false;
-    }
-
-    for (let i = 0; i < diagonal.length; i++) {
-      if (diagonal[i] !== null) {
-        if (diagonal[i].colour === movingPiece.piece.colour) {
-          return false;
-        } else {
-          this.takenTile = `x${endTile.column}`;
-          return true;
-        }
-      }
-    }
-    return true;
+  movement(startTile, endTile, boardState, colour) {
+    return checkBishopMovement(startTile, endTile, boardState, colour);
   }
   playSound(endTile, boardState) {
     let audio = new Audio(this.moveSound);
@@ -255,6 +135,8 @@ class Bishop extends Piece {
         .colour !== this.colour
     ) {
       audio = new Audio(this.captureSound);
+      this.takenTile = `x${endTile.column}`;
+
       audio.play();
     }
   }
