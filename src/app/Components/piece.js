@@ -107,6 +107,7 @@ class Knight extends Piece {
         .colour !== this.colour
     ) {
       audio = new Audio(this.captureSound);
+      this.takenTile = `x${endTile.column}`;
       audio.play();
     }
   }
