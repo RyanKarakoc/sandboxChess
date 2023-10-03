@@ -12,6 +12,7 @@ const {
   checkBishopMovement,
   checkQueenMovement,
   checkKingMovement,
+  checkPawnAttackingKing,
 } = require("./utils.js");
 
 class Piece {
@@ -24,6 +25,7 @@ class Piece {
     this.captureSound = loadCaptureSound();
     this.castleSound = loadCastleSound();
     this.checkSound = loadCheckSound();
+    this.columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   }
 }
 
@@ -36,8 +38,13 @@ class Pawn extends Piece {
   movement(startTile, endTile, boardState, colour) {
     return checkPawnMovement(startTile, endTile, boardState, colour);
   }
-  playSound(endTile, boardState) {
+  playSound(startTile, endTile, boardState, colour) {
     let audio = new Audio(this.moveSound);
+    if (checkPawnAttackingKing(startTile, endTile, boardState, colour)) {
+      console.log("yes");
+      audio = new Audio(this.checkSound);
+      audio.play();
+    }
     if (
       boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
       null

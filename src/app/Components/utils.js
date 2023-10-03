@@ -783,9 +783,6 @@ const checkPawnAttackingKing = (startTile, endTile, boardState, colour) => {
     }
   }
 
-  console.log(endTile.row);
-  console.log(whiteKingPosition[1] + 1);
-
   //check if attacking black king
   if (colour === "white") {
     if (
@@ -795,10 +792,8 @@ const checkPawnAttackingKing = (startTile, endTile, boardState, colour) => {
           columnRef.indexOf(blackKingPosition[0]) - 1) &&
       endTile.row === blackKingPosition[1] - 1
     ) {
-      console.log("1");
       return true;
     } else {
-      console.log("2");
       return false;
     }
     //check if attacking white king
@@ -810,10 +805,8 @@ const checkPawnAttackingKing = (startTile, endTile, boardState, colour) => {
           columnRef.indexOf(whiteKingPosition[0]) - 1) &&
       endTile.row === whiteKingPosition[1] + 1
     ) {
-      console.log("3");
       return true;
     } else {
-      console.log("4");
       return false;
     }
   }
