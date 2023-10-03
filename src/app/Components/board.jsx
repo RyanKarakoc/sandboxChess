@@ -315,7 +315,12 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new Bishop("white", whiteBishop);
                         if (
-                          piece.movement(startTile, endTile, boardState, movingPiece.colour) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 1
                         ) {
                           piece.playSound(endTile, boardState);
@@ -336,7 +341,12 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new Bishop("black", blackBishop);
                         if (
-                          piece.movement(startTile, endTile, boardState, movingPiece.colour) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 0
                         ) {
                           piece.playSound(endTile, boardState);
@@ -359,7 +369,12 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new Queen("white", whiteQueen);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 1
                         ) {
                           piece.playSound(endTile, boardState);
@@ -380,7 +395,12 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new Queen("black", blackQueen);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 0
                         ) {
                           piece.playSound(endTile, boardState);
