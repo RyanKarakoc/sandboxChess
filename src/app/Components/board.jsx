@@ -423,7 +423,12 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new King("white", whiteKing);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 1
                         ) {
                           piece.playSound(endTile, boardState);
@@ -444,7 +449,12 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new King("black", blackKing);
                         if (
-                          piece.movement(startTile, endTile, boardState) &&
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
                           alternateMove % 2 === 0
                         ) {
                           piece.playSound(endTile, boardState);
