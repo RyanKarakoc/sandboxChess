@@ -766,4 +766,5 @@ module.exports = {
   checkKnightMovement,
   checkBishopMovement,
   checkQueenMovement,
+  checkKingMovement,
 };
