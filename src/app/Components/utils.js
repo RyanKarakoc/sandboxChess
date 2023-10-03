@@ -760,6 +760,65 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
   return true;
 };
 
+const checkPawnAttackingKing = (startTile, endTile, boardState, colour) => {
+  const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+  let whiteKingPosition = "";
+  let blackKingPosition = "";
+  // getting position of the white king
+  for (let i = 0; i < boardState.length; i++) {
+    for (let j = 0; j < boardState[i].length; j++) {
+      if (
+        boardState[i][j] !== null &&
+        boardState[i][j].type === "king" &&
+        boardState[i][j].colour === "white"
+      ) {
+        whiteKingPosition = [`${columnRef[j]}`, i + 1];
+      } else if (
+        boardState[i][j] !== null &&
+        boardState[i][j].type === "king" &&
+        boardState[i][j].colour === "black"
+      ) {
+        blackKingPosition = [`${columnRef[j]}`, i + 1];
+      }
+    }
+  }
+
+  console.log(endTile.row);
+  console.log(whiteKingPosition[1] + 1);
+
+  //check if attacking black king
+  if (colour === "white") {
+    if (
+      (columnRef.indexOf(endTile.column) ===
+        columnRef.indexOf(whiteKingPosition[0]) + 1 ||
+        columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(blackKingPosition[0]) - 1) &&
+      endTile.row === blackKingPosition[1] - 1
+    ) {
+      console.log("1");
+      return true;
+    } else {
+      console.log("2");
+      return false;
+    }
+    //check if attacking white king
+  } else if (colour === "black") {
+    if (
+      (columnRef.indexOf(endTile.column) ===
+        columnRef.indexOf(whiteKingPosition[0]) + 1 ||
+        columnRef.indexOf(endTile.column) ===
+          columnRef.indexOf(whiteKingPosition[0]) - 1) &&
+      endTile.row === whiteKingPosition[1] + 1
+    ) {
+      console.log("3");
+      return true;
+    } else {
+      console.log("4");
+      return false;
+    }
+  }
+};
+
 module.exports = {
   checkPawnMovement,
   checkRookMovement,
@@ -767,4 +826,5 @@ module.exports = {
   checkBishopMovement,
   checkQueenMovement,
   checkKingMovement,
+  checkPawnAttackingKing,
 };
