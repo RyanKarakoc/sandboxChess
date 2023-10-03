@@ -32,7 +32,7 @@ const whiteKing = require("../fileMock.js");
 const {
   checkPawnMovement,
   checkPawnAttackingKing,
-} = require("../src/app/Components/utils.js");
+} = require("../src/app/Components/utils/pawnMovements.js");
 
 describe("checkPawnMovement", () => {
   describe("starting position move 2 spaces", () => {

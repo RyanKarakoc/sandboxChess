@@ -7,12 +7,15 @@ const {
 
 const {
   checkPawnMovement,
+  checkPawnAttackingKing,
+} = require("./utils/pawnMovements.js");
+
+const {
   checkRookMovement,
   checkKnightMovement,
   checkBishopMovement,
   checkQueenMovement,
   checkKingMovement,
-  checkPawnAttackingKing,
 } = require("./utils.js");
 
 class Piece {
