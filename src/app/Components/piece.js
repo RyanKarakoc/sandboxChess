@@ -24,7 +24,6 @@ class Piece {
     this.captureSound = loadCaptureSound();
     this.castleSound = loadCastleSound();
     this.checkSound = loadCheckSound();
-    this.columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   }
 }
 
