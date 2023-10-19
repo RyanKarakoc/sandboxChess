@@ -51,6 +51,7 @@ class Pawn extends Piece {
       console.log("yes");
       audio = new Audio(this.checkSound);
       audio.play();
+      return;
     }
     if (
       boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
