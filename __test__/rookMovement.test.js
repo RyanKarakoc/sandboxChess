@@ -888,7 +888,7 @@ describe("checkRookMovement", () => {
   });
 });
 
-describe.only("checkRookAttackingKing", () => {
+describe("checkRookAttackingKing", () => {
   describe("negative horizontal check", () => {
     describe("white rook", () => {
       test("should return true when attacking black king on negative horizontal, and nothing in the way", () => {

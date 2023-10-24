@@ -130,7 +130,7 @@ const checkRookAttackingKing = (startTile, endTile, boardState, colour) => {
       yPos.push(boardState[i][endTileColumnNumber]);
     }
   }
-
+  // make king last in all arrays
   xPos.reverse();
   yPos.reverse();
 
