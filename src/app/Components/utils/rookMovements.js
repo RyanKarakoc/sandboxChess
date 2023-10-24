@@ -176,6 +176,7 @@ const checkRookAttackingKing = (startTile, endTile, boardState, colour) => {
       }
     }
   }
+  return false;
 };
 
 module.exports = { checkRookMovement, checkRookAttackingKing };
