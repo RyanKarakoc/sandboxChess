@@ -230,6 +230,7 @@ const checkBishopAttackingKing = (startTile, endTile, boardState, colour) => {
       }
     }
   }
+  return false;
 };
 
 module.exports = { checkBishopMovement, checkBishopAttackingKing };
