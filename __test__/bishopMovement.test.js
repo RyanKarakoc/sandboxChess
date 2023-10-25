@@ -1257,7 +1257,7 @@ describe("checkBishopMovement", () => {
   });
 });
 
-describe.only("checkBishopAttackingKing", () => {
+describe("checkBishopAttackingKing", () => {
   describe("x neg y neg", () => {
     describe("white bishop", () => {
       test("should return true when white bishop is attacking black king, and nothing in the way", () => {
