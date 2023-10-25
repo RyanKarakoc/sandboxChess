@@ -514,7 +514,6 @@ const Board = ({ moves, setMoves }) => {
                         }
                       }
                     }
-                    // setSoundState(move);
                   }}
                 >
                   <div>
