@@ -16,15 +16,16 @@ const {
 } = require("./utils/rookMovements.js");
 
 const {
+  checkKnightMovement,
+  checkKnightAttackingKing,
+} = require("./utils/knightMovement.js");
+
+const {
   checkBishopMovement,
   checkBishopAttackingKing,
 } = require("./utils/bishopMovement.js");
 
-const {
-  checkKnightMovement,
-  checkQueenMovement,
-  checkKingMovement,
-} = require("./utils.js");
+const { checkQueenMovement, checkKingMovement } = require("./utils.js");
 
 class Piece {
   constructor(type, colour, representation) {

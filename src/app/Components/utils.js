@@ -1,97 +1,3 @@
-const checkKnightMovement = (startTile, endTile, boardState, colour) => {
-  const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  // x pos
-  if (endTile.row === startTile.row + 2) {
-    if (
-      columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) + 1 ||
-      columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) - 1
-    ) {
-      if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour !== colour
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-  // x neg
-  else if (endTile.row === startTile.row - 2) {
-    if (
-      columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) + 1 ||
-      columnRef.indexOf(endTile.column) ===
-        columnRef.indexOf(startTile.column) - 1
-    ) {
-      if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour !== colour
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-  //  y pos
-  else if (
-    columnRef.indexOf(endTile.column) ===
-    columnRef.indexOf(startTile.column) + 2
-  ) {
-    if (
-      endTile.row === startTile.row + 1 ||
-      endTile.row === startTile.row - 1
-    ) {
-      if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour !== colour
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-  // y neg
-  else if (
-    columnRef.indexOf(endTile.column) ===
-    columnRef.indexOf(startTile.column) - 2
-  ) {
-    if (
-      endTile.row === startTile.row + 1 ||
-      endTile.row === startTile.row - 1
-    ) {
-      if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null
-      ) {
-        return true;
-      } else if (
-        boardState[endTile.row - 1][columnRef.indexOf(endTile.column)]
-          .colour !== colour
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-};
-
 const checkQueenMovement = (startTile, endTile, boardState, colour) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const movement = [];
@@ -422,7 +328,6 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
 };
 
 module.exports = {
-  checkKnightMovement,
   checkQueenMovement,
   checkKingMovement,
 };
