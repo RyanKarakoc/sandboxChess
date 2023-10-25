@@ -31,7 +31,10 @@ const whiteBishop = require("../fileMock.js");
 const whiteQueen = require("../fileMock.js");
 const whiteKing = require("../fileMock.js");
 
-const { checkKnightMovement } = require("../src/app/Components/utils.js");
+const {
+  checkKnightMovement,
+  checkKnightAttackingKing,
+} = require("../src/app/Components/utils/knightMovement.js");
 
 describe("checkKnightMovement", () => {
   describe("x+2, y+1", () => {
@@ -1291,6 +1294,1323 @@ describe("checkKnightMovement", () => {
         );
         // assert
         expect(result).toBe(true);
+      });
+    });
+  });
+});
+
+describe("checkKnightAttackingKing", () => {
+  describe("x+2, y+1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 5 };
+        const endTile = { column: "c", row: 7 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            null,
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            new Knight("white", whiteKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking whiet king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 5 };
+        const endTile = { column: "c", row: 7 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            new Knight("black", blackKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("white", whiteKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("x+2, y-1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 5 };
+        const endTile = { column: "c", row: 7 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            null,
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("black", blackKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Knight("white", whiteKnight),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            new Knight("white", whiteKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            new King("black", blackKing),
+            null,
+            null,
+            null,
+          ],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            null,
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 4 };
+        const endTile = { column: "c", row: 2 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            new Knight("black", blackKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            null,
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("x-2, y+1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 5 };
+        const endTile = { column: "g", row: 7 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            null,
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("white", whiteKnight),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 4 };
+        const endTile = { column: "c", row: 2 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            null,
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            new King("white", whiteKing),
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("x-2, y-1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 5 };
+        const endTile = { column: "g", row: 7 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            null,
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("white", whiteKnight),
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            new King("black", blackKing),
+            null,
+            null,
+            null,
+          ],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            null,
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 4 };
+        const endTile = { column: "g", row: 2 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("black", blackKnight),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            null,
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("y+2, x+1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 5 };
+        const endTile = { column: "d", row: 6 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            null,
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            new Knight("white", whiteKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 5 };
+        const endTile = { column: "d", row: 6 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            new Knight("black", blackKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("white", whiteKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("y+2, x-1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 5 };
+        const endTile = { column: "f", row: 6 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("white", whiteKnight),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 5 };
+        const endTile = { column: "f", row: 6 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            null,
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("black", blackKnight),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("white", whiteKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("y-2, x+1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 4 };
+        const endTile = { column: "d", row: 3 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("black", blackKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            new Knight("white", whiteKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            null,
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "b", row: 4 };
+        const endTile = { column: "d", row: 3 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            new Knight("black", blackKnight),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            null,
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("y-2, x-1", () => {
+    describe("white knight", () => {
+      test("should return true when white knight is attacking black king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 4 };
+        const endTile = { column: "f", row: 3 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            null,
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("black", blackKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("white", whiteKnight),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            null,
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+    describe("black knight", () => {
+      test("should return true when black knight is attacking white king and nothing in the way", () => {
+        // arange
+        const startTile = { column: "h", row: 4 };
+        const endTile = { column: "f", row: 3 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new Knight("black", blackKnight),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            null,
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(true);
+      });
+    });
+  });
+  describe("not attacking", () => {
+    describe("white knight", () => {
+      test("should return false when white knight not attacking black king", () => {
+        // arange
+        const startTile = { column: "b", row: 1 };
+        const endTile = { column: "c", row: 3 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "white";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(false);
+      });
+    });
+    describe("black knight", () => {
+      test("should return false when black knight not attacking white king", () => {
+        // arange
+        const startTile = { column: "b", row: 8 };
+        const endTile = { column: "c", row: 6 };
+        const boardState = [
+          [
+            new Rook("white", whiteRook),
+            new Knight("white", whiteKnight),
+            new Bishop("white", whiteBishop),
+            new Queen("white", whiteQueen),
+            new King("white", whiteKing),
+            new Bishop("white", whiteBishop),
+            new Knight("white", whiteKnight),
+            new Rook("white", whiteRook),
+          ],
+          [
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+            new Pawn("white", whitePawn),
+          ],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null],
+          [
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+            new Pawn("black", blackPawn),
+          ],
+          [
+            new Rook("black", blackRook),
+            new Knight("black", blackKnight),
+            new Bishop("black", blackBishop),
+            new Queen("black", blackQueen),
+            new King("black", blackKing),
+            new Bishop("black", blackBishop),
+            new Knight("black", blackKnight),
+            new Rook("black", blackRook),
+          ],
+        ];
+        const colour = "black";
+        // act
+        const result = checkKnightAttackingKing(
+          startTile,
+          endTile,
+          boardState,
+          colour
+        );
+        // assert
+        expect(result).toBe(false);
       });
     });
   });
