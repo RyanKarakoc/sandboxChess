@@ -118,7 +118,6 @@ const checkRookAttackingKing = (startTile, endTile, boardState, colour) => {
   // y neg
   const yNeg = [];
   for (let i = 0; i < endTile.row - rowOffset; i++) {
-    console.log(i);
     if (boardState[i][endTileColumnNumber] !== null) {
       yNeg.push(boardState[i][endTileColumnNumber]);
     }

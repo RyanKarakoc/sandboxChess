@@ -147,7 +147,6 @@ const checkKnightAttackingKing = (startTile, endTile, boardState, colour) => {
       knightScope.push(boardState[endTile.row - 3][endTileColumnNumber - 1]);
     }
   }
-  console.log(knightScope);
   // loop through knight scope
   for (let i = 0; i < knightScope.length; i++) {
     if (knightScope[i].type === "king" && knightScope[i].colour !== colour) {

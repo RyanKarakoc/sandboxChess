@@ -20,7 +20,6 @@ const checkBishopMovement = (startTile, endTile, boardState, colour) => {
     endTile.row - startTile.row ===
       columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
   ) {
-    console.log("x pos, y pos");
 
     let offset = 1;
     for (let i = 0; i < endTile.row - startTile.row; i++) {
@@ -38,7 +37,6 @@ const checkBishopMovement = (startTile, endTile, boardState, colour) => {
     startTile.row - endTile.row ===
       columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
   ) {
-    console.log("x pos, y neg");
     let offset = 2;
     for (let i = 0; i < startTile.row - endTile.row; i++) {
       diagonal.push(
@@ -55,7 +53,6 @@ const checkBishopMovement = (startTile, endTile, boardState, colour) => {
     endTile.row - startTile.row ===
       columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
   ) {
-    console.log("x neg, y pos");
     let offset = 1;
     for (
       let i = 0;
@@ -77,7 +74,6 @@ const checkBishopMovement = (startTile, endTile, boardState, colour) => {
     startTile.row - endTile.row ===
       columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
   ) {
-    console.log("x neg, y neg");
     let offset = 1;
     for (
       let i = 0;
@@ -215,7 +211,6 @@ const checkBishopAttackingKing = (startTile, endTile, boardState, colour) => {
   // loop through bishopScope
   for (let i = 0; i < bishopScope.length; i++) {
     const axisArray = bishopScope[i];
-    console.log(i);
     for (let j = 0; j < axisArray.length; j++) {
       if (axisArray[j].type === "king" && axisArray[j].colour !== colour) {
         const arrayContainsEnemyKing = axisArray;
