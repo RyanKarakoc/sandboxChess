@@ -25,7 +25,9 @@ const {
   checkBishopAttackingKing,
 } = require("./utils/bishopMovement.js");
 
-const { checkQueenMovement, checkKingMovement } = require("./utils.js");
+const { checkQueenMovement } = require("./utils/queenMovement.js");
+
+const { checkKingMovement } = require("./utils.js");
 
 class Piece {
   constructor(type, colour, representation) {
