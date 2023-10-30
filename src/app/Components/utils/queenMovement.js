@@ -1,10 +1,14 @@
-const checkKingMovement = (startTile, endTile, boardState, colour) => {
+const checkQueenMovement = (startTile, endTile, boardState, colour) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const movement = [];
 
+  // if moving diagonal
   if (
+    // x pos y pos
     columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-    startTile.row < endTile.row
+    startTile.row < endTile.row &&
+    endTile.row - startTile.row ===
+      columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
   ) {
     let offset = 1;
     for (let i = 0; i < endTile.row - startTile.row; i++) {
@@ -16,8 +20,11 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
       offset++;
     }
   } else if (
+    //x pos y neg
     columnRef.indexOf(startTile.column) < columnRef.indexOf(endTile.column) &&
-    startTile.row > endTile.row
+    startTile.row > endTile.row &&
+    startTile.row - endTile.row ===
+      columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
   ) {
     let offset = 2;
     for (let i = 0; i < startTile.row - endTile.row; i++) {
@@ -29,8 +36,11 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
       offset++;
     }
   } else if (
+    // x neg y pos
     columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-    startTile.row < endTile.row
+    startTile.row < endTile.row &&
+    endTile.row - startTile.row ===
+      columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
   ) {
     let offset = 1;
     for (
@@ -47,8 +57,11 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
       offset++;
     }
   } else if (
+    // x neg y neg
     columnRef.indexOf(startTile.column) > columnRef.indexOf(endTile.column) &&
-    startTile.row > endTile.row
+    startTile.row > endTile.row &&
+    startTile.row - endTile.row ===
+      columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column)
   ) {
     let offset = 1;
     for (
@@ -139,7 +152,7 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
     return false;
   }
 
-  if (movement.length > 1) {
+  if (movement.length === 0) {
     return false;
   }
 
@@ -156,6 +169,4 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
   return true;
 };
 
-module.exports = {
-  checkKingMovement,
-};
+module.exports = { checkQueenMovement };
