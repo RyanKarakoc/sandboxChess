@@ -169,4 +169,6 @@ const checkQueenMovement = (startTile, endTile, boardState, colour) => {
   return true;
 };
 
-module.exports = { checkQueenMovement };
+const checkQueenAttackingKing = (startTile, endTile, boardState, colour) => {};
+
+module.exports = { checkQueenMovement, checkQueenAttackingKing };
