@@ -31,7 +31,9 @@ const whiteBishop = require("../fileMock.js");
 const whiteQueen = require("../fileMock.js");
 const whiteKing = require("../fileMock.js");
 
-const { checkKingMovement } = require("../src/app/Components/utils.js");
+const {
+  checkKingMovement,
+} = require("../src/app/Components/utils/kingMovement.js");
 
 describe("checkKingMovement", () => {
   describe("horizontal movement", () => {

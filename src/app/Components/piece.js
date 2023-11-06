@@ -30,7 +30,7 @@ const {
   checkQueenAttackingKing,
 } = require("./utils/queenMovement.js");
 
-const { checkKingMovement } = require("./utils.js");
+const { checkKingMovement } = require("./utils/kingMovement.js");
 
 class Piece {
   constructor(type, colour, representation) {
