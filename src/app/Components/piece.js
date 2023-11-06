@@ -193,8 +193,13 @@ class Queen extends Piece {
   movement(startTile, endTile, boardState, colour) {
     return checkQueenMovement(startTile, endTile, boardState, colour);
   }
-  playSound(endTile, boardState) {
+  playSound(startTile, endTile, boardState, colour) {
     let audio = new Audio(this.moveSound);
+    if (checkQueenAttackingKing(startTile, endTile, boardState, colour)) {
+      audio = new Audio(this.checkSound);
+      audio.play();
+      return;
+    }
     if (
       boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
       null
