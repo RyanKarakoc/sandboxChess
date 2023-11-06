@@ -25,7 +25,10 @@ const {
   checkBishopAttackingKing,
 } = require("./utils/bishopMovement.js");
 
-const { checkQueenMovement } = require("./utils/queenMovement.js");
+const {
+  checkQueenMovement,
+  checkQueenAttackingKing,
+} = require("./utils/queenMovement.js");
 
 const { checkKingMovement } = require("./utils.js");
 
