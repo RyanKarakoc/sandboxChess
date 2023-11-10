@@ -156,6 +156,9 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
   return true;
 };
 
+const canKingCastle = () => {};
+
 module.exports = {
   checkKingMovement,
+  canKingCastle,
 };

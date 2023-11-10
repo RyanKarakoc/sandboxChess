@@ -33,6 +33,7 @@ const whiteKing = require("../fileMock.js");
 
 const {
   checkKingMovement,
+  canKingCastle,
 } = require("../src/app/Components/utils/kingMovement.js");
 
 describe("checkKingMovement", () => {
