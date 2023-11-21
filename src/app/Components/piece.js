@@ -30,7 +30,7 @@ const {
   checkQueenAttackingKing,
 } = require("./utils/queenMovement.js");
 
-const { checkKingMovement } = require("./utils/kingMovement.js");
+const { checkKingMovement, canKingCastle } = require("./utils/kingMovement.js");
 
 class Piece {
   constructor(type, colour, representation) {
@@ -58,7 +58,6 @@ class Pawn extends Piece {
   playSound(startTile, endTile, boardState, colour) {
     let audio = new Audio(this.moveSound);
     if (checkPawnAttackingKing(startTile, endTile, boardState, colour)) {
-      console.log("yes");
       audio = new Audio(this.checkSound);
       audio.play();
       return;
@@ -93,7 +92,6 @@ class Rook extends Piece {
   playSound(startTile, endTile, boardState, colour) {
     let audio = new Audio(this.moveSound);
     if (checkRookAttackingKing(startTile, endTile, boardState, colour)) {
-      console.log("yes");
       audio = new Audio(this.checkSound);
       audio.play();
       return;
@@ -227,8 +225,14 @@ class King extends Piece {
   movement(startTile, endTile, boardState, colour) {
     return checkKingMovement(startTile, endTile, boardState, colour);
   }
-  playSound(endTile, boardState) {
+  playSound(startTile, endTile, boardState, colour) {
     let audio = new Audio(this.moveSound);
+    if (canKingCastle(startTile, endTile, boardState, colour)) {
+
+      audio = new Audio(this.castleSound);
+      audio.play();
+      return;
+    }
     if (
       boardState[endTile.row - 1][this.columnRef.indexOf(endTile.column)] ===
       null
