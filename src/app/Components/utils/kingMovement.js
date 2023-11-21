@@ -158,7 +158,14 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
   return true;
 };
 
-const canKingCastle = (startTile, endTile, boardState, colour) => {
+const canKingCastle = (
+  startTile,
+  endTile,
+  boardState,
+  colour,
+  haveKingsMoved,
+  haveRooksMoved
+) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const endTileColumnNumber = columnRef.indexOf(endTile.column);
   const startTileColumnNumber = columnRef.indexOf(startTile.column);
@@ -194,7 +201,13 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
     if (endTile.row === 2) {
       return false;
     }
+    if (haveKingsMoved.whiteKing) {
+      return false; // if the white king has already moved
+    }
     if (endTile.row === 1 && endTile.column === "c") {
+      if (haveRooksMoved.whiteRooks.hasQueenSideWhiteRookMoved) {
+        return false; // if the white queen side rook has already moved
+      }
       for (const tiles of whiteQueenSideTilesToCheck) {
         if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
           return false; // if any tile is under attack return false
@@ -202,6 +215,9 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
       }
       return true; // If none of the tiles are under attack, return true
     } else if (endTile.row === 1 && endTile.column === "g") {
+      if (haveRooksMoved.whiteRooks.hasKingSideWhiteRookMoved) {
+        return false; // if the white king side rook has already moved
+      }
       for (const tiles of whiteKingSideTilesToCheck) {
         if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
           return false; // if any tile is under attack return false
@@ -216,7 +232,13 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
     if (endTile.row === 7) {
       return false;
     }
+    if (haveKingsMoved.blackKing) {
+      return false; // if the black king has already moved
+    }
     if (endTile.row === 8 && endTile.column === "c") {
+      if (haveRooksMoved.blackRooks.hasQueenSideblackRookMoved) {
+        return false; // if the black queen side rook has already moved
+      }
       for (const tiles of blackQueenSideTilesToCheck) {
         if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
           return false; // if any tile is under attack return false
@@ -224,6 +246,9 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
       }
       return true; // If none of the tiles are under attack, return true
     } else if (endTile.row === 8 && endTile.column === "g") {
+      if (haveRooksMoved.blackRooks.hasKingSideblackRookMoved) {
+        return false; // if the black king side rook has already moved
+      }
       for (const tiles of blackKingSideTilesToCheck) {
         if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
           return false; // if any tile is under attack return false
