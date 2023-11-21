@@ -20,7 +20,6 @@ const checkBishopMovement = (startTile, endTile, boardState, colour) => {
     endTile.row - startTile.row ===
       columnRef.indexOf(endTile.column) - columnRef.indexOf(startTile.column)
   ) {
-
     let offset = 1;
     for (let i = 0; i < endTile.row - startTile.row; i++) {
       diagonal.push(
@@ -160,7 +159,6 @@ const checkBishopAttackingKing = (startTile, endTile, boardState, colour) => {
       xPosYNeg.push(boardState[xPosYNegRow][xPosYNegColumn]);
     }
   }
-  console.log(xPosYNeg);
   // x pos y pos
   const xPosYPos = [];
   let xPosYPosRow = endTile.row - rowOffset;

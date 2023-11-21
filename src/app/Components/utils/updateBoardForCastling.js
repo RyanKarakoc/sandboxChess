@@ -10,7 +10,6 @@ const updateBoardForCastling = (startTile, endTile, boardState, colour) => {
   if (colour === "white") {
     const king = new King("white", whiteKing);
     const rook = new Rook("white", whiteRook);
-    console.log(king);
     if (endTile.column === "c") {
       newBoard[0][0] = null;
       newBoard[0][1] = null;
