@@ -492,6 +492,12 @@ const Board = ({ moves, setMoves }) => {
                             boardState,
                             movingPiece.colour
                           );
+                          piece.playSound(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          );
                           setBoardState(boardAfterCastling);
                           setAlternateMove(alternateMove + 1);
                           setMoves((prevMoves) => [
@@ -513,7 +519,12 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 1
                         ) {
-                          piece.playSound(endTile, boardState);
+                          piece.playSound(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          );
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
                           setMoves((prevMoves) => [
@@ -537,8 +548,14 @@ const Board = ({ moves, setMoves }) => {
                             boardState,
                             movingPiece.colour
                           ) &&
-                          alternateMove % 2 === 1
+                          alternateMove % 2 === 0
                         ) {
+                          piece.playSound(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          );
                           const boardAfterCastling = updateBoardForCastling(
                             startTile,
                             endTile,
@@ -566,7 +583,12 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 0
                         ) {
-                          piece.playSound(endTile, boardState);
+                          piece.playSound(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          );
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
                           setMoves((prevMoves) => [
