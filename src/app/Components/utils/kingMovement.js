@@ -1,3 +1,5 @@
+const { isTileUnderAttack } = require("./tilesUnderAttack");
+
 const checkKingMovement = (startTile, endTile, boardState, colour) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const movement = [];
@@ -156,7 +158,76 @@ const checkKingMovement = (startTile, endTile, boardState, colour) => {
   return true;
 };
 
-const canKingCastle = () => {};
+const canKingCastle = (startTile, endTile, boardState, colour) => {
+  const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+  const endTileColumnNumber = columnRef.indexOf(endTile.column);
+  const startTileColumnNumber = columnRef.indexOf(startTile.column);
+  const boardSize = 8;
+  const rowOffset = 1;
+  const columnOffsett = 1;
+
+  const whiteQueenSideTilesToCheck = [
+    { column: "c", row: 1 },
+    { column: "d", row: 1 },
+    { column: "e", row: 1 },
+  ];
+  const whiteKingSideTilesToCheck = [
+    { column: "e", row: 1 },
+    { column: "f", row: 1 },
+    { column: "g", row: 1 },
+  ];
+  const blackQueenSideTilesToCheck = [
+    { column: "c", row: 8 },
+    { column: "d", row: 8 },
+    { column: "e", row: 8 },
+  ];
+  const blackKingSideTilesToCheck = [
+    { column: "e", row: 8 },
+    { column: "f", row: 8 },
+    { column: "g", row: 8 },
+  ];
+
+  if (colour === "white") {
+    if (startTile.column !== "e" || startTile.row !== 1) {
+      return false;
+    }
+    if (endTile.row === 1 && endTile.column === "c") {
+      for (const tiles of whiteQueenSideTilesToCheck) {
+        console.log(tiles);
+        if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
+          return false; // if any tile is under attack return false
+        }
+      }
+      return true; // If none of the tiles are under attack, return true
+    } else if (endTile.row === 1 && endTile.column === "g") {
+      for (const tiles of whiteKingSideTilesToCheck) {
+        if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
+          return false; // if any tile is under attack return false
+        }
+      }
+    }
+    return true; // If none of the tiles are under attack, return true
+  } else {
+    if (startTile.column !== "e" || startTile.row !== 8) {
+      return false;
+    }
+    if (endTile.row === 8 && endTile.column === "c") {
+      for (const tiles of blackQueenSideTilesToCheck) {
+        if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
+          return false; // if any tile is under attack return false
+        }
+      }
+      return true; // If none of the tiles are under attack, return true
+    } else if (endTile.row === 8 && endTile.column === "g") {
+      for (const tiles of blackKingSideTilesToCheck) {
+        if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
+          return false; // if any tile is under attack return false
+        }
+      }
+      return true; // If none of the tiles are under attack, return true
+    }
+  }
+};
 
 module.exports = {
   checkKingMovement,
