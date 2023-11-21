@@ -191,6 +191,9 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
     if (startTile.column !== "e" || startTile.row !== 1) {
       return false;
     }
+    if (endTile.row === 2) {
+      return false;
+    }
     if (endTile.row === 1 && endTile.column === "c") {
       for (const tiles of whiteQueenSideTilesToCheck) {
         if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
@@ -208,6 +211,9 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
     return true; // If none of the tiles are under attack, return true
   } else {
     if (startTile.column !== "e" || startTile.row !== 8) {
+      return false;
+    }
+    if (endTile.row === 7) {
       return false;
     }
     if (endTile.row === 8 && endTile.column === "c") {
