@@ -13,6 +13,10 @@ const {
   King,
 } = require("../Components/piece.js");
 
+const {
+  updateBoardForCastling,
+} = require("../../app/Components/utils/updateBoardForCastling.js");
+
 import blackPawn from "../../../public/blackPieces/pawn.png";
 import blackRook from "../../../public/blackPieces/rook.png";
 import blackKnight from "../../../public/blackPieces/knight.png";
@@ -25,6 +29,7 @@ import whiteKnight from "../../../public/whitePieces/knight.png";
 import whiteBishop from "../../../public/whitePieces/bishop.png";
 import whiteQueen from "../../../public/whitePieces/queen.png";
 import whiteKing from "../../../public/whitePieces/king.png";
+import { canKingCastle } from "./utils/kingMovement";
 
 class Tile {
   constructor(row, column, piece) {
@@ -473,6 +478,33 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new King("white", whiteKing);
                         if (
+                          canKingCastle(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
+                          alternateMove % 2 === 1
+                        ) {
+                          const boardAfterCastling = updateBoardForCastling(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          );
+                          setBoardState(boardAfterCastling);
+                          setAlternateMove(alternateMove + 1);
+                          setMoves((prevMoves) => [
+                            ...prevMoves,
+                            [
+                              alternateMove,
+                              piece.whiteSymbol,
+                              piece.takenTile || endTile.column,
+                              endTile.row,
+                            ],
+                          ]);
+                        }
+                        if (
                           piece.movement(
                             startTile,
                             endTile,
@@ -498,6 +530,33 @@ const Board = ({ moves, setMoves }) => {
                         }
                       } else {
                         const piece = new King("black", blackKing);
+                        if (
+                          canKingCastle(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          ) &&
+                          alternateMove % 2 === 1
+                        ) {
+                          const boardAfterCastling = updateBoardForCastling(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour
+                          );
+                          setBoardState(boardAfterCastling);
+                          setAlternateMove(alternateMove + 1);
+                          setMoves((prevMoves) => [
+                            ...prevMoves,
+                            [
+                              alternateMove,
+                              piece.whiteSymbol,
+                              piece.takenTile || endTile.column,
+                              endTile.row,
+                            ],
+                          ]);
+                        }
                         if (
                           piece.movement(
                             startTile,
