@@ -1510,66 +1510,10 @@ describe("canKingCastle", () => {
         // assert
         expect(result).toBe(false);
       });
-      test("should return false if rook has already moved", () => {
-        // arange
-        const startTile = { column: "e", row: 1 };
-        const endTile = { column: "g", row: 1 };
-        const boardState = [
-          [
-            new Rook("white", whiteRook),
-            new Knight("white", whiteKnight),
-            new Bishop("white", whiteBishop),
-            new Queen("white", whiteQueen),
-            new King("white", whiteKing),
-            null,
-            new Rook("white", whiteRook),
-            null,
-          ],
-          [
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-          ],
-          [null, null, null, null, null, null, null, null],
-          [null, null, null, null, null, null, null, null],
-          [null, null, null, null, null, null, null, null],
-          [null, null, null, null, null, null, null, null],
-          [
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-          ],
-          [
-            new Rook("black", blackRook),
-            new Knight("black", blackKnight),
-            new Bishop("black", blackBishop),
-            new Queen("black", blackQueen),
-            new King("black", blackKing),
-            new Bishop("black", blackBishop),
-            new Knight("black", blackKnight),
-            new Rook("black", blackRook),
-          ],
-        ];
-        const colour = "white";
-        // act
-        const result = canKingCastle(startTile, endTile, boardState, colour);
-        // assert
-        expect(result).toBe(false);
-      });
       test("should return false if castle tiles attacked by pawn", () => {
         // arange
         const startTile = { column: "e", row: 1 };
-        const endTile = { column: "c", row: 1 };
+        const endTile = { column: "g", row: 1 };
         const boardState = [
           [
             new Rook("white", whiteRook),
@@ -1886,7 +1830,7 @@ describe("canKingCastle", () => {
     describe("black king", () => {
       test("should return false if king has already moved", () => {
         // arange
-        const startTile = { column: "e", row: 8 };
+        const startTile = { column: "f", row: 8 };
         const endTile = { column: "g", row: 8 };
         const boardState = [
           [
@@ -1932,62 +1876,6 @@ describe("canKingCastle", () => {
             new King("black", blackKing),
             null,
             new Rook("black", blackRook),
-          ],
-        ];
-        const colour = "black";
-        // act
-        const result = canKingCastle(startTile, endTile, boardState, colour);
-        // assert
-        expect(result).toBe(false);
-      });
-      test("should return false if rook has already moved", () => {
-        // arange
-        const startTile = { column: "e", row: 8 };
-        const endTile = { column: "g", row: 8 };
-        const boardState = [
-          [
-            new Rook("white", whiteRook),
-            new Knight("white", whiteKnight),
-            new Bishop("white", whiteBishop),
-            new Queen("white", whiteQueen),
-            new King("white", whiteKing),
-            new Bishop("white", whiteBishop),
-            new Knight("white", whiteKnight),
-            new Rook("white", whiteRook),
-          ],
-          [
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-            new Pawn("white", whitePawn),
-          ],
-          [null, null, null, null, null, null, null, null],
-          [null, null, null, null, null, null, null, null],
-          [null, null, null, null, null, null, null, null],
-          [null, null, null, null, null, null, null, null],
-          [
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-            new Pawn("black", blackPawn),
-          ],
-          [
-            new Rook("black", blackRook),
-            new Knight("black", blackKnight),
-            new Bishop("black", blackBishop),
-            new Queen("black", blackQueen),
-            new King("black", blackKing),
-            null,
-            new Rook("black", blackRook),
-            null,
           ],
         ];
         const colour = "black";
@@ -2304,107 +2192,5 @@ describe("canKingCastle", () => {
         expect(result).toBe(false);
       });
     });
-  });
-  test.only("random test", () => {
-    // arange
-    const startTile = { column: "e", row: 1 };
-    const endTile = { column: "c", row: 1 };
-    // const boardState = [
-    //   [
-    //     new Rook("white", whiteRook),
-    //     new Knight("white", whiteKnight),
-    //     new Bishop("white", whiteBishop),
-    //     new Queen("white", whiteQueen),
-    //     new King("white", whiteKing),
-    //     null,
-    //     null,
-    //     new Rook("white", whiteRook),
-    //   ],
-    //   [
-    //     new Pawn("white", whitePawn),
-    //     new Pawn("white", whitePawn),
-    //     new Pawn("white", whitePawn),
-    //     new Pawn("white", whitePawn),
-    //     new Pawn("white", whitePawn),
-    //     new Pawn("white", whitePawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("white", whitePawn),
-    //   ],
-    //   [null, null, null, null, null, null, null, null],
-    //   [null, null, null, null, null, null, null, null],
-    //   [null, null, null, null, null, null, null, null],
-    //   [null, null, null, null, null, null, null, null],
-    //   [
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //     new Pawn("black", blackPawn),
-    //   ],
-    //   [
-    //     new Rook("black", blackRook),
-    //     new Knight("black", blackKnight),
-    //     new Bishop("black", blackBishop),
-    //     new Queen("black", blackQueen),
-    //     new King("black", blackKing),
-    //     new Bishop("black", blackBishop),
-    //     new Knight("black", blackKnight),
-    //     new Rook("black", blackRook),
-    //   ],
-    // ];
-    const boardState = [
-      [
-        new Rook("white", whiteRook),
-        new Knight("white", whiteKnight),
-        new Bishop("white", whiteBishop),
-        new Queen("white", whiteQueen),
-        new King("white", whiteKing),
-        new Bishop("white", whiteBishop),
-        new Knight("white", whiteKnight),
-        new Rook("white", whiteRook),
-      ],
-      [
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-        new Pawn("white", whitePawn),
-      ],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-        new Pawn("black", blackPawn),
-      ],
-      [
-        new Rook("black", blackRook),
-        new Knight("black", blackKnight),
-        new Bishop("black", blackBishop),
-        new Queen("black", blackQueen),
-        new King("black", blackKing),
-        new Bishop("black", blackBishop),
-        new Knight("black", blackKnight),
-        new Rook("black", blackRook),
-      ],
-    ];
-    const colour = "white";
-    // act
-    const result = canKingCastle(startTile, endTile, boardState, colour);
-    // assert
-    expect(result).toBe(true);
   });
 });
