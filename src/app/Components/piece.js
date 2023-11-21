@@ -225,10 +225,25 @@ class King extends Piece {
   movement(startTile, endTile, boardState, colour) {
     return checkKingMovement(startTile, endTile, boardState, colour);
   }
-  playSound(startTile, endTile, boardState, colour) {
+  playSound(
+    startTile,
+    endTile,
+    boardState,
+    colour,
+    haveKingsMoved,
+    haveRooksMoved
+  ) {
     let audio = new Audio(this.moveSound);
-    if (canKingCastle(startTile, endTile, boardState, colour)) {
-
+    if (
+      canKingCastle(
+        startTile,
+        endTile,
+        boardState,
+        colour,
+        haveKingsMoved,
+        haveRooksMoved
+      )
+    ) {
       audio = new Audio(this.castleSound);
       audio.play();
       return;
