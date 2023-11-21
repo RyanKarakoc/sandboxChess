@@ -193,7 +193,6 @@ const canKingCastle = (startTile, endTile, boardState, colour) => {
     }
     if (endTile.row === 1 && endTile.column === "c") {
       for (const tiles of whiteQueenSideTilesToCheck) {
-        console.log(tiles);
         if (isTileUnderAttack(startTile, endTile, boardState, colour, tiles)) {
           return false; // if any tile is under attack return false
         }
