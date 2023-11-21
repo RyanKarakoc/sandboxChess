@@ -98,7 +98,8 @@ const Board = ({ moves, setMoves }) => {
   const [movingPiece, setMovingPiece] = useState(null);
   const [startTile, setStartTile] = useState(null);
   const [alternateMove, setAlternateMove] = useState(1);
-  const [sound, setSound] = useState();
+  const [movedWhiteKing, setMovedWhiteKing] = useState(false);
+  const [movedBlackKing, setMovedBlackKing] = useState(false);
 
   const board = [];
 
@@ -478,6 +479,7 @@ const Board = ({ moves, setMoves }) => {
                       if (movingPiece.colour === "white") {
                         const piece = new King("white", whiteKing);
                         if (
+                          !movedWhiteKing &&
                           canKingCastle(
                             startTile,
                             endTile,
@@ -486,6 +488,7 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 1
                         ) {
+                          setMovedWhiteKing(true);
                           const boardAfterCastling = updateBoardForCastling(
                             startTile,
                             endTile,
@@ -519,6 +522,7 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 1
                         ) {
+                          setMovedWhiteKing(true);
                           piece.playSound(
                             startTile,
                             endTile,
@@ -542,6 +546,7 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new King("black", blackKing);
                         if (
+                          !movedBlackKing &&
                           canKingCastle(
                             startTile,
                             endTile,
@@ -550,6 +555,7 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 0
                         ) {
+                          setMovedBlackKing(true);
                           piece.playSound(
                             startTile,
                             endTile,
@@ -583,6 +589,7 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 0
                         ) {
+                          setMovedBlackKing(true);
                           piece.playSound(
                             startTile,
                             endTile,
