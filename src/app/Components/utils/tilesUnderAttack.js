@@ -60,57 +60,43 @@ const rookAttackingTile = (
   const attackedTileColumn = columnRef.indexOf(attackedTile.column);
   const attackedTileRow = attackedTile.row - rowOffset;
 
-  // vertical
-  const verticalAttackedTileColumn = [];
-  if (colour === "white") {
-    for (let i = 0; i < boardSize; i++) {
-      if (boardState[i][attackedTileColumn] !== null) {
-        verticalAttackedTileColumn.push(boardState[i][attackedTileColumn]);
-      }
-    }
-    if (
-      verticalAttackedTileColumn[0].type === "rook" &&
-      verticalAttackedTileColumn[0].colour !== colour
-    ) {
-      return true;
-    }
-  } else if (colour === "black") {
-    for (let i = boardSize - rowOffset; i >= 0; i--) {
-      if (boardState[i][attackedTileColumn] !== null) {
-        verticalAttackedTileColumn.push(boardState[i][attackedTileColumn]);
-      }
-    }
-    if (
-      verticalAttackedTileColumn[0].type === "rook" &&
-      verticalAttackedTileColumn[0].colour !== colour
-    ) {
-      return true;
-    }
-  }
+  const rookDirections = [
+    { x: 0, y: 1 }, // up
+    { x: 0, y: -1 }, // down
+    { x: 1, y: 0 }, // right
+    { x: -1, y: 0 }, // left
+  ];
 
-  // horizontal
-  const horizontalAttackedTileRowQueenSide = [];
-  const horizontalAttackedTileRowKingSide = [];
+  for (const direction of rookDirections) {
+    let newRow = attackedTileRow + direction.y;
+    let newColumn = attackedTileColumn + direction.x;
 
-  for (let i = 0; i < attackedTileColumn; i++) {
-    if (boardState[attackedTileRow][i] !== null) {
-      horizontalAttackedTileRowQueenSide.push(boardState[attackedTileRow][i]);
+    while (
+      newRow >= 0 &&
+      newRow < boardSize &&
+      newColumn >= 0 &&
+      newColumn < boardSize
+    ) {
+      if (
+        boardState[newRow][newColumn] !== null &&
+        boardState[newRow][newColumn].colour !== colour
+      ) {
+        if (boardState[newRow][newColumn].type === "rook") {
+          return true; // Rook can attack the tile
+        } else {
+          break; // Obstruction by another piece, stop checking in this direction
+        }
+      } else if (
+        boardState[newRow][newColumn] !== null &&
+        boardState[newRow][newColumn].colour === colour
+      ) {
+        break; // Own piece blocking the path, Rook cannot attack the tile
+      }
+      newRow += direction.y;
+      newColumn += direction.x;
     }
   }
-  for (let i = attackedTileColumn + columnOffsett; i < boardSize; i++) {
-    if (boardState[attackedTileRow][i] !== null) {
-      horizontalAttackedTileRowKingSide.push(boardState[attackedTileRow][i]);
-    }
-  }
-  if (
-    (horizontalAttackedTileRowQueenSide[0].type === "rook" &&
-      horizontalAttackedTileRowQueenSide[0].colour !== colour) ||
-    (horizontalAttackedTileRowKingSide[0].type === "rook" &&
-      horizontalAttackedTileRowKingSide[0].colour !== colour)
-  ) {
-    return true;
-  }
-  return false;
+  return false; // Rook cannot attack the tile due to obstructions
 };
 
 const knightAttackingTile = (
