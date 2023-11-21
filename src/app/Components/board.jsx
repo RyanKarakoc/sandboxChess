@@ -98,8 +98,16 @@ const Board = ({ moves, setMoves }) => {
   const [movingPiece, setMovingPiece] = useState(null);
   const [startTile, setStartTile] = useState(null);
   const [alternateMove, setAlternateMove] = useState(1);
-  const [movedWhiteKing, setMovedWhiteKing] = useState(false);
-  const [movedBlackKing, setMovedBlackKing] = useState(false);
+  const [hasWhiteKingMoved, setHasWhiteKingMoved] = useState(false);
+  const [hasBlackKingMoved, setHasBlackKingMoved] = useState(false);
+  const [hasKingSideWhiteRookMoved, setHasKingSideWhiteRookMoved] =
+    useState(false);
+  const [hasKingSideBlackRookMoved, setHasKingSideBlackRookMoved] =
+    useState(false);
+  const [hasQueenSideWhiteRookMoved, setHasQueenSideWhiteRookMoved] =
+    useState(false);
+  const [hasQueenSideBlackRookMoved, setHasQueenSideBlackRookMoved] =
+    useState(false);
 
   const board = [];
 
@@ -231,6 +239,12 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 1
                         ) {
+                          if (startTile.row === 1 && startTile.column === "a") {
+                            setHasQueenSideWhiteRookMoved(true);
+                          }
+                          if (startTile.row === 1 && startTile.column === "h") {
+                            setHasKingSideWhiteRookMoved(true);
+                          }
                           piece.playSound(
                             startTile,
                             endTile,
@@ -262,6 +276,12 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 0
                         ) {
+                          if (startTile.row === 8 && startTile.column === "a") {
+                            setHasQueenSideBlackRookMoved(true);
+                          }
+                          if (startTile.row === 8 && startTile.column === "h") {
+                            setHasKingSideBlackRookMoved(true);
+                          }
                           piece.playSound(
                             startTile,
                             endTile,
@@ -476,19 +496,35 @@ const Board = ({ moves, setMoves }) => {
                         }
                       }
                     } else if (movingPiece.type === "king") {
+                      const haveKingsMoved = {
+                        whiteKing: hasWhiteKingMoved,
+                        blackKing: hasBlackKingMoved,
+                      };
+                      const haveRooksMoved = {
+                        whiteRooks: {
+                          queenSideRook: hasQueenSideWhiteRookMoved,
+                          kingSideRook: hasKingSideWhiteRookMoved,
+                        },
+                        blackRooks: {
+                          queenSideRook: hasQueenSideBlackRookMoved,
+                          kingSideRook: hasKingSideBlackRookMoved,
+                        },
+                      };
                       if (movingPiece.colour === "white") {
                         const piece = new King("white", whiteKing);
+
                         if (
-                          !movedWhiteKing &&
                           canKingCastle(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            haveKingsMoved,
+                            haveRooksMoved
                           ) &&
                           alternateMove % 2 === 1
                         ) {
-                          setMovedWhiteKing(true);
+                          setHasWhiteKingMoved(true);
                           const boardAfterCastling = updateBoardForCastling(
                             startTile,
                             endTile,
@@ -499,7 +535,9 @@ const Board = ({ moves, setMoves }) => {
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            haveKingsMoved,
+                            haveRooksMoved
                           );
                           setBoardState(boardAfterCastling);
                           setAlternateMove(alternateMove + 1);
@@ -522,12 +560,14 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 1
                         ) {
-                          setMovedWhiteKing(true);
+                          setHasWhiteKingMoved(true);
                           piece.playSound(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            haveKingsMoved,
+                            haveRooksMoved
                           );
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
@@ -546,21 +586,24 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new King("black", blackKing);
                         if (
-                          !movedBlackKing &&
                           canKingCastle(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            haveKingsMoved,
+                            haveRooksMoved
                           ) &&
                           alternateMove % 2 === 0
                         ) {
-                          setMovedBlackKing(true);
+                          setHasBlackKingMoved(true);
                           piece.playSound(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            haveKingsMoved,
+                            haveRooksMoved
                           );
                           const boardAfterCastling = updateBoardForCastling(
                             startTile,
@@ -589,12 +632,14 @@ const Board = ({ moves, setMoves }) => {
                           ) &&
                           alternateMove % 2 === 0
                         ) {
-                          setMovedBlackKing(true);
+                          setHasBlackKingMoved(true);
                           piece.playSound(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            haveKingsMoved,
+                            haveRooksMoved
                           );
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
