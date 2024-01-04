@@ -8,6 +8,7 @@ const {
 const {
   checkPawnMovement,
   checkPawnAttackingKing,
+  checkEnPassant,
 } = require("./utils/pawnMovements.js");
 
 const {
@@ -52,13 +53,19 @@ class Pawn extends Piece {
     this.whiteSymbol = "♙";
     this.blackSymbol = "♟︎";
   }
-  movement(startTile, endTile, boardState, colour) {
-    return checkPawnMovement(startTile, endTile, boardState, colour);
+  movement(startTile, endTile, boardState, colour, prevMove) {
+    return checkPawnMovement(startTile, endTile, boardState, colour, prevMove);
   }
-  playSound(startTile, endTile, boardState, colour) {
+  playSound(startTile, endTile, boardState, colour, prevMove) {
     let audio = new Audio(this.moveSound);
     if (checkPawnAttackingKing(startTile, endTile, boardState, colour)) {
       audio = new Audio(this.checkSound);
+      audio.play();
+      return;
+    }
+    if (checkEnPassant(startTile, endTile, boardState, colour, prevMove)) {
+      audio = new Audio(this.captureSound);
+      this.takenTile = `ex${endTile.column}`;
       audio.play();
       return;
     }
