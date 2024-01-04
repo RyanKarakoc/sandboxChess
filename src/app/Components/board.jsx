@@ -15,7 +15,8 @@ const {
 
 const {
   updateBoardForCastling,
-} = require("../../app/Components/utils/updateBoardForCastling.js");
+  updateBoardForEnPessant,
+} = require("./utils/boardUpdates.js");
 
 import blackPawn from "../../../public/blackPieces/pawn.png";
 import blackRook from "../../../public/blackPieces/rook.png";
@@ -30,6 +31,7 @@ import whiteBishop from "../../../public/whitePieces/bishop.png";
 import whiteQueen from "../../../public/whitePieces/queen.png";
 import whiteKing from "../../../public/whitePieces/king.png";
 import { canKingCastle } from "./utils/kingMovement";
+import { checkEnPassant } from "./utils/pawnMovements";
 
 class Tile {
   constructor(row, column, piece) {
@@ -164,14 +166,16 @@ const Board = ({ moves, setMoves }) => {
                     });
 
                     if (movingPiece.type === "pawn") {
+                      const lastMove = moves[moves.length - 1] || [];
                       if (movingPiece.colour === "white") {
                         const piece = new Pawn("white", whitePawn);
                         if (
-                          piece.movement(
+                          checkEnPassant(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            lastMove
                           ) &&
                           alternateMove % 2 === 1
                         ) {
@@ -179,7 +183,43 @@ const Board = ({ moves, setMoves }) => {
                             startTile,
                             endTile,
                             boardState,
+                            movingPiece.colour,
+                            lastMove
+                          );
+                          const boardAfterEnPassant = updateBoardForEnPessant(
+                            startTile,
+                            endTile,
+                            boardState,
                             movingPiece.colour
+                          );
+                          setBoardState(boardAfterEnPassant);
+                          setAlternateMove(alternateMove + 1);
+                          setMoves((prevMoves) => [
+                            ...prevMoves,
+                            [
+                              alternateMove,
+                              piece.whiteSymbol,
+                              piece.takenTile || endTile.column,
+                              endTile.row,
+                            ],
+                          ]);
+                        }
+                        if (
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour,
+                            lastMove
+                          ) &&
+                          alternateMove % 2 === 1
+                        ) {
+                          piece.playSound(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour,
+                            lastMove
                           );
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
@@ -198,11 +238,12 @@ const Board = ({ moves, setMoves }) => {
                       } else {
                         const piece = new Pawn("black", blackPawn);
                         if (
-                          piece.movement(
+                          checkEnPassant(
                             startTile,
                             endTile,
                             boardState,
-                            movingPiece.colour
+                            movingPiece.colour,
+                            lastMove
                           ) &&
                           alternateMove % 2 === 0
                         ) {
@@ -210,7 +251,43 @@ const Board = ({ moves, setMoves }) => {
                             startTile,
                             endTile,
                             boardState,
+                            movingPiece.colour,
+                            lastMove
+                          );
+                          const boardAfterEnPassant = updateBoardForEnPessant(
+                            startTile,
+                            endTile,
+                            boardState,
                             movingPiece.colour
+                          );
+                          setBoardState(boardAfterEnPassant);
+                          setAlternateMove(alternateMove + 1);
+                          setMoves((prevMoves) => [
+                            ...prevMoves,
+                            [
+                              alternateMove,
+                              piece.whiteSymbol,
+                              piece.takenTile || endTile.column,
+                              endTile.row,
+                            ],
+                          ]);
+                        }
+                        if (
+                          piece.movement(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour,
+                            lastMove
+                          ) &&
+                          alternateMove % 2 === 0
+                        ) {
+                          piece.playSound(
+                            startTile,
+                            endTile,
+                            boardState,
+                            movingPiece.colour,
+                            lastMove
                           );
                           setBoardState(newBoard.reverse());
                           setAlternateMove(alternateMove + 1);
@@ -512,7 +589,6 @@ const Board = ({ moves, setMoves }) => {
                       };
                       if (movingPiece.colour === "white") {
                         const piece = new King("white", whiteKing);
-
                         if (
                           canKingCastle(
                             startTile,
