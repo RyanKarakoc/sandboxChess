@@ -38,7 +38,7 @@ const {
 
 const {
   updateBoardForCastling,
-} = require("../src/app/Components/utils/updateBoardForCastling.js");
+} = require("../src/app/Components/utils/boardUpdates.js");
 
 describe("checkKingMovement", () => {
   describe("horizontal movement", () => {
