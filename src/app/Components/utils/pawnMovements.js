@@ -1,4 +1,110 @@
-const checkPawnMovement = (startTile, endTile, boardState, colour) => {
+const checkEnPassant = (startTile, endTile, boardState, colour, prevMove) => {
+  const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+  const lastMoveTile = [prevMove[2], prevMove[3]];
+  const rowOffset = 1;
+  const columnOffset = 1;
+  const columnRefStartTile = columnRef.indexOf(startTile.column);
+  const columnRefLastMove = columnRef.indexOf(lastMoveTile[0]);
+
+  let pieceXNegfromPawn;
+  let pieceXPosfromPawn;
+
+  if (startTile.column !== "a") {
+    pieceXNegfromPawn =
+      boardState[startTile.row - rowOffset][
+        columnRef.indexOf(startTile.column) - columnOffset
+      ] !== null &&
+      boardState[startTile.row - rowOffset][
+        columnRef.indexOf(startTile.column) - columnOffset
+      ].type === "pawn" &&
+      boardState[startTile.row - rowOffset][
+        columnRef.indexOf(startTile.column) - columnOffset
+      ].colour !== colour;
+  }
+
+  if (startTile.column !== "h") {
+    pieceXPosfromPawn =
+      boardState[startTile.row - rowOffset][
+        columnRef.indexOf(startTile.column) + columnOffset
+      ] !== null &&
+      boardState[startTile.row - rowOffset][
+        columnRef.indexOf(startTile.column) + columnOffset
+      ].type === "pawn" &&
+      boardState[startTile.row - rowOffset][
+        columnRef.indexOf(startTile.column) + columnOffset
+      ].colour !== colour;
+  }
+
+  const whiteXNegEnPessant =
+    columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column) ===
+      1 && startTile.row - endTile.row === -1;
+
+  const whiteXPosEnPessant =
+    columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column) ===
+      -1 && startTile.row - endTile.row === -1;
+
+  const blackXNegEnPessant =
+    columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column) ===
+      1 && startTile.row - endTile.row === 1;
+
+  const blackXPosEnPessant =
+    columnRef.indexOf(startTile.column) - columnRef.indexOf(endTile.column) ===
+      -1 && startTile.row - endTile.row === 1;
+
+  if (colour === "white" && startTile.row === 5) {
+    if (
+      columnRefLastMove === columnRefStartTile - 1 &&
+      startTile.row === lastMoveTile[1] &&
+      pieceXNegfromPawn
+    ) {
+      if (whiteXNegEnPessant) {
+        return true;
+      }
+    }
+
+    if (
+      columnRefLastMove === columnRefStartTile + 1 &&
+      startTile.row === lastMoveTile[1] &&
+      pieceXPosfromPawn
+    ) {
+      if (whiteXPosEnPessant) {
+        return true;
+      }
+    }
+  }
+
+  if (colour === "black" && startTile.row === 4) {
+    if (
+      columnRefLastMove === columnRefStartTile - 1 &&
+      startTile.row === lastMoveTile[1] &&
+      pieceXNegfromPawn
+    ) {
+      if (blackXNegEnPessant) {
+        return true;
+      }
+    }
+
+    if (
+      columnRefLastMove === columnRefStartTile + 1 &&
+      startTile.row === lastMoveTile[1] &&
+      pieceXPosfromPawn
+    ) {
+      if (blackXPosEnPessant) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
+const checkPawnMovement = (
+  startTile,
+  endTile,
+  boardState,
+  colour,
+  prevMove
+) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const emptyTile =
     boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null;
@@ -17,6 +123,14 @@ const checkPawnMovement = (startTile, endTile, boardState, colour) => {
     boardState[endTile.row - 1][columnRef.indexOf(endTile.column)] === null ||
     boardState[endTile.row - 1][columnRef.indexOf(endTile.column)].colour !==
       colour;
+
+  const enPessant = checkEnPassant(
+    startTile,
+    endTile,
+    boardState,
+    colour,
+    prevMove
+  );
 
   if (colour === "white") {
     if (startTile.row === 2) {
@@ -64,6 +178,9 @@ const checkPawnMovement = (startTile, endTile, boardState, colour) => {
       oneDiagonalSpace &&
       takingPiece
     ) {
+      return true;
+      // enPessant
+    } else if (enPessant) {
       return true;
     } else {
       return false;
@@ -114,6 +231,9 @@ const checkPawnMovement = (startTile, endTile, boardState, colour) => {
       oneDiagonalSpace &&
       takingPiece
     ) {
+      return true;
+      // enPessant
+    } else if (enPessant) {
       return true;
     } else {
       return false;
@@ -173,4 +293,4 @@ const checkPawnAttackingKing = (startTile, endTile, boardState, colour) => {
   }
 };
 
-module.exports = { checkPawnMovement, checkPawnAttackingKing };
+module.exports = { checkPawnMovement, checkPawnAttackingKing, checkEnPassant };
