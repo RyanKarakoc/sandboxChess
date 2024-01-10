@@ -252,7 +252,29 @@ const canKingCastle = (
   }
 };
 
+const kingLocation = (boardState, colour) => {
+  const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
+  const rowOffset = 1;
+  const kingCoordinates = [];
+
+  for (let i = 0; i < boardState.length; i++) {
+    for (let j = 0; j < boardState[i].length; j++) {
+      if (boardState[i][j] !== null) {
+        if (
+          boardState[i][j].type === "king" &&
+          boardState[i][j].colour === colour
+        ) {
+          kingCoordinates.push(columnRef[j]);
+          kingCoordinates.push(i + rowOffset);
+        }
+      }
+    }
+  }
+  return kingCoordinates;
+};
+
 module.exports = {
   checkKingMovement,
   canKingCastle,
+  kingLocation,
 };
