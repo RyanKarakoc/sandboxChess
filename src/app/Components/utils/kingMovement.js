@@ -166,13 +166,6 @@ const canKingCastle = (
   haveKingsMoved,
   haveRooksMoved
 ) => {
-  const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  const endTileColumnNumber = columnRef.indexOf(endTile.column);
-  const startTileColumnNumber = columnRef.indexOf(startTile.column);
-  const boardSize = 8;
-  const rowOffset = 1;
-  const columnOffsett = 1;
-
   const whiteQueenSideTilesToCheck = [
     { column: "c", row: 1 },
     { column: "d", row: 1 },
