@@ -34,6 +34,7 @@ const whiteKing = require("../fileMock.js");
 const {
   checkKingMovement,
   canKingCastle,
+  kingLocation,
 } = require("../src/app/Components/utils/kingMovement.js");
 
 const {
@@ -2656,6 +2657,123 @@ describe("updateBoardForCastling", () => {
         // assert
         expect(result).toEqual(newBoardState);
       });
+    });
+  });
+});
+
+describe("kingLocation", () => {
+  describe("white king", () => {
+    test("should return the position of the white king", () => {
+      // arange
+      const boardState = [
+        [
+          new Rook("white", whiteRook),
+          new Knight("white", whiteKnight),
+          new Bishop("white", whiteBishop),
+          new Queen("white", whiteQueen),
+          new King("white", whiteKing),
+          new Bishop("white", whiteBishop),
+          new Knight("white", whiteKnight),
+          new Rook("white", whiteRook),
+        ],
+        [
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+        ],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+        ],
+        [
+          new Rook("black", blackRook),
+          new Knight("black", blackKnight),
+          new Bishop("black", blackBishop),
+          new Queen("black", blackQueen),
+          new King("black", blackKing),
+          new Bishop("black", blackBishop),
+          new Knight("black", blackKnight),
+          new Rook("black", blackRook),
+        ],
+      ];
+      const colour = "white";
+      const kingPosition = ["e", 1];
+      // act
+      const result = kingLocation(boardState, colour);
+      // assert
+      expect(result).toEqual(kingPosition);
+    });
+  });
+  describe("black king", () => {
+    test("should return the position of the black king", () => {
+      // arange
+      const boardState = [
+        [
+          new Rook("white", whiteRook),
+          new Knight("white", whiteKnight),
+          new Bishop("white", whiteBishop),
+          new Queen("white", whiteQueen),
+          new King("white", whiteKing),
+          new Bishop("white", whiteBishop),
+          new Knight("white", whiteKnight),
+          new Rook("white", whiteRook),
+        ],
+        [
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+          new Pawn("white", whitePawn),
+        ],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+          new Pawn("black", blackPawn),
+        ],
+        [
+          new Rook("black", blackRook),
+          new Knight("black", blackKnight),
+          new Bishop("black", blackBishop),
+          new Queen("black", blackQueen),
+          new King("black", blackKing),
+          new Bishop("black", blackBishop),
+          new Knight("black", blackKnight),
+          new Rook("black", blackRook),
+        ],
+      ];
+      const colour = "black";
+      const kingPosition = ["e", 8];
+      // act
+      const result = kingLocation(boardState, colour);
+      // assert
+      expect(result).toEqual(kingPosition);
     });
   });
 });
