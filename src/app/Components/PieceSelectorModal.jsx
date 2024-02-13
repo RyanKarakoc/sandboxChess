@@ -74,7 +74,7 @@ const PieceSelectorModal = ({
                   src={image}
                   key={index}
                   alt={`${pieceImage}`}
-                  className="w-4/5 h-1/3 rounded-half border-2 border-black bg-white ml-2 mr-2 flex justify-center items-center"
+                  className="w-4/5 h-1/3 rounded-half border-2 border-black bg-amber-50 ml-2 mr-2 flex justify-center items-center"
                 ></Image>
               );
             })}
