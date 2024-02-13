@@ -1,4 +1,4 @@
-const AlternatingColour = ({ colour }) => {
+const AlternatingColourTile = ({ colour }) => {
   let bgColour = "";
   if (colour === "white") {
     bgColour = "bg-white";
@@ -15,4 +15,4 @@ const AlternatingColour = ({ colour }) => {
   );
 };
 
-export default AlternatingColour;
+export default AlternatingColourTile;
