@@ -48,9 +48,6 @@ const TileSelecetorModal = ({ setChosenTile, setTileSelectorModal }) => {
       : defaultRowTileStyle;
   };
 
-  console.log(activeColumnIndex, "columnIndex");
-  console.log(activeRowIndex, "rowIndex");
-
   useEffect(() => {
     if (activeColumnIndex !== null && activeRowIndex !== null) {
       setChosenTile(() => {
