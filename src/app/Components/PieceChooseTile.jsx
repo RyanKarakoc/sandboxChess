@@ -7,8 +7,15 @@ const PieceChooserTile = ({ chosenPiece, setPieceSelectorModal }) => {
     setPieceSelectorModal(true);
   };
   return (
-    <div className="w-1/6 h-3/4 rounded-half border-2 border-black bg-white ml-2 flex justify-center items-center hover:scale-110 active:scale-110 transition-transform cursor-pointer select-none">
-      <Image src={chosenPiece} onClick={handleOnclick}></Image>
+    <div className="w-1/6 h-3/4 rounded-half border-2 border-black bg-white ml-2 flex justify-center items-center hover:scale-110 active:scale-110 transition-transform cursor-pointer">
+      <Image
+        layout=""
+        width={70}
+        height={70}
+        src={chosenPiece}
+        alt="Chosen Piece"
+        onClick={handleOnclick}
+      ></Image>
     </div>
   );
 };
