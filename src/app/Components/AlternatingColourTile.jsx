@@ -8,7 +8,7 @@ const AlternatingColourTile = ({ colour }) => {
 
   return (
     <div
-      className={`w-1/6 h-3/4 rounded-half border-2 border-black ${bgColour} ml-2 flex justify-center items-center`}
+      className={`w-1/6 h-3/4 rounded-half border-2 border-black ${bgColour} shadow-lg flex justify-center items-center`}
     >
       {colour}
     </div>
