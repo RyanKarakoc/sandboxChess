@@ -63,7 +63,7 @@ const PieceSelectorModal = ({
                   src={pieceImage}
                   key={index}
                   alt={`${pieceImage}`}
-                  className="w-4/5 h-1/3 rounded-half border-2 border-black bg-amber-50 ml-2 mr-2 mt-2 flex justify-center items-center"
+                  className="w-4/5 h-1/3 rounded-half border-2 border-black bg-amber-50 shadow-lg ml-2 mr-2 mt-20 flex justify-center items-center hover:scale-110 active:scale-110 transition-transform select-none cursor-pointer"
                 ></Image>
               );
             })
@@ -74,7 +74,7 @@ const PieceSelectorModal = ({
                   src={image}
                   key={index}
                   alt={`${pieceImage}`}
-                  className="w-4/5 h-1/3 rounded-half border-2 border-black bg-amber-50 ml-2 mr-2 flex justify-center items-center"
+                  className="w-4/5 h-1/3 rounded-half border-2 border-black bg-amber-50 shadow-lg ml-2 mr-2 mt-20 flex justify-center items-center hover:scale-110 active:scale-110 transition-transform select-none cursor-pointer"
                 ></Image>
               );
             })}
