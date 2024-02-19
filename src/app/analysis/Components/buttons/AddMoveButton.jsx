@@ -49,9 +49,9 @@ const AddMoveButton = ({
             newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
             newBoard[endTileBoardRow][endTileBoardColumn] === piece.black;
           if (endTileHasOpponentPiece) {
-            newMove = `${moveCount}. ${piece.white} ${chosenStartTile[0]}x${chosenEndTile}`;
+            newMove = `${moveCount}.${piece.white} ${chosenStartTile[0]}x${chosenEndTile}`;
           } else {
-            newMove = `${moveCount}. ${piece.white} ${chosenStartTile[0]}${chosenEndTile}`;
+            newMove = `${moveCount}.${piece.white} ${chosenStartTile[0]}${chosenEndTile}`;
           }
         }
       } else if (count % 2 === 0) {
@@ -62,10 +62,9 @@ const AddMoveButton = ({
             newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
             newBoard[endTileBoardRow][endTileBoardColumn] === piece.white;
           if (endTileHasOpponentPiece) {
-            newMove = `${moveCount}. ${piece.black} ${chosenStartTile[0]}x${chosenEndTile}`;
-            console.log("4");
+            newMove = `${moveCount}.${piece.black} ${chosenStartTile[0]}x${chosenEndTile}`;
           } else {
-            newMove = `${moveCount}. ${piece.black} ${chosenStartTile[0]}${chosenEndTile}`;
+            newMove = `${moveCount}.${piece.black} ${chosenStartTile[0]}${chosenEndTile}`;
           }
         }
       }
