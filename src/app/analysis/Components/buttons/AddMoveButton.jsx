@@ -24,7 +24,7 @@ const AddMoveButton = ({
       { type: "king", white: "♚", black: "♔" },
     ];
 
-    let newMove = "";
+    let newMove = [];
 
     const moveCount = count + 1;
 
@@ -41,41 +41,69 @@ const AddMoveButton = ({
     const newBoard = [...board];
 
     for (const piece of pieceRepresentation) {
-      if (count % 2 !== 0) {
+      if (count % 2 === 0) {
         // if it's whites move
         if (piece.type === pieceType) {
           // add correct colour piece to move
           const endTileHasOpponentPiece =
             newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
-            newBoard[endTileBoardRow][endTileBoardColumn] === piece.black;
+            pieceRepresentation
+              .map((piece) => {
+                return piece.black;
+              })
+              .includes(newBoard[endTileBoardRow][endTileBoardColumn]);
           if (endTileHasOpponentPiece) {
-            newMove = `${moveCount}.${piece.white} ${chosenStartTile[0]}x${chosenEndTile}`;
+            newMove.push(
+              moveCount,
+              piece.black,
+              `${chosenStartTile[0]}x${chosenEndTile[0]}`,
+              chosenEndTile[1]
+            );
           } else {
-            newMove = `${moveCount}.${piece.white} ${chosenStartTile[0]}${chosenEndTile}`;
+            newMove.push(
+              moveCount,
+              piece.black,
+              `${chosenStartTile[0]}${chosenEndTile[0]}`,
+              chosenEndTile[1]
+            );
           }
         }
-      } else if (count % 2 === 0) {
+      } else if (count % 2 !== 0) {
         // if it's blacks move
         if (piece.type === pieceType) {
           // add correct colour piece to move
           const endTileHasOpponentPiece =
             newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
-            newBoard[endTileBoardRow][endTileBoardColumn] === piece.white;
+            pieceRepresentation
+              .map((piece) => {
+                return piece.white;
+              })
+              .includes(newBoard[endTileBoardRow][endTileBoardColumn]);
           if (endTileHasOpponentPiece) {
-            newMove = `${moveCount}.${piece.black} ${chosenStartTile[0]}x${chosenEndTile}`;
+            newMove.push(
+              moveCount,
+              piece.white,
+              `${chosenStartTile[0]}x${chosenEndTile[0]}`,
+              chosenEndTile[1]
+            );
           } else {
-            newMove = `${moveCount}.${piece.black} ${chosenStartTile[0]}${chosenEndTile}`;
+            newMove.push(
+              moveCount,
+              piece.white,
+              `${chosenStartTile[0]}${chosenEndTile[0]}`,
+              chosenEndTile[1]
+            );
           }
         }
       }
     }
 
     for (const piece of pieceRepresentation) {
-      if (piece.type === pieceType && count % 2 !== 0) {
+      if (piece.type === pieceType && count % 2 === 0) {
         newBoard[startTileBoardRow][startTileBoardColumn] = null;
         newBoard[endTileBoardRow][endTileBoardColumn] = piece.white;
         setBoard(newBoard);
-      } else if (piece.type === pieceType && count % 2 === 0) {
+      } else if (piece.type === pieceType && count % 2 !== 0) {
         newBoard[startTileBoardRow][startTileBoardColumn] = null;
         newBoard[endTileBoardRow][endTileBoardColumn] = piece.black;
         setBoard(newBoard);
