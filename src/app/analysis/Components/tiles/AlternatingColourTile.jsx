@@ -1,8 +1,8 @@
 const AlternatingColourTile = ({ colour }) => {
   let bgColour = "";
-  if (colour === "white") {
+  if (colour === "White") {
     bgColour = "bg-white";
-  } else if (colour === "black") {
+  } else if (colour === "Black") {
     bgColour = "bg-neutral-400";
   }
 
