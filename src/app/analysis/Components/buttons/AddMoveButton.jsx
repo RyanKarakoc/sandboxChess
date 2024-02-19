@@ -41,34 +41,31 @@ const AddMoveButton = ({
     const newBoard = [...board];
 
     for (const piece of pieceRepresentation) {
-      for (let i = 0; i < moves.length; i++) {
-        if (count % 2 !== 0) {
-          // if it's whites move
-          if (piece.type === pieceType) {
-            // add correct colour piece to move
-            const endTileHasOpponentPiece =
-              newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
-              newBoard[endTileBoardRow][endTileBoardColumn] === piece.black;
-            console.log(endTileHasOpponentPiece);
-            if (endTileHasOpponentPiece) {
-              newMove = `${moveCount}. ${piece.white} ${chosenStartTile[0]}x${chosenEndTile}`;
-            } else {
-              newMove = `${moveCount}. ${piece.white} ${chosenStartTile[0]}${chosenEndTile}`;
-            }
+      if (count % 2 !== 0) {
+        // if it's whites move
+        if (piece.type === pieceType) {
+          // add correct colour piece to move
+          const endTileHasOpponentPiece =
+            newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
+            newBoard[endTileBoardRow][endTileBoardColumn] === piece.black;
+          if (endTileHasOpponentPiece) {
+            newMove = `${moveCount}. ${piece.white} ${chosenStartTile[0]}x${chosenEndTile}`;
+          } else {
+            newMove = `${moveCount}. ${piece.white} ${chosenStartTile[0]}${chosenEndTile}`;
           }
-        } else if (count % 2 === 0) {
-          // if it's blacks move
-          if (piece.type === pieceType) {
-            // add correct colour piece to move
-            const endTileHasOpponentPiece =
-              newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
-              newBoard[endTileBoardRow][endTileBoardColumn] === piece.white;
-            console.log(endTileHasOpponentPiece);
-            if (endTileHasOpponentPiece) {
-              newMove = `${moveCount}. ${piece.black} ${chosenStartTile[0]}x${chosenEndTile}`;
-            } else {
-              newMove = `${moveCount}. ${piece.black} ${chosenStartTile[0]}${chosenEndTile}`;
-            }
+        }
+      } else if (count % 2 === 0) {
+        // if it's blacks move
+        if (piece.type === pieceType) {
+          // add correct colour piece to move
+          const endTileHasOpponentPiece =
+            newBoard[endTileBoardRow][endTileBoardColumn] !== null &&
+            newBoard[endTileBoardRow][endTileBoardColumn] === piece.white;
+          if (endTileHasOpponentPiece) {
+            newMove = `${moveCount}. ${piece.black} ${chosenStartTile[0]}x${chosenEndTile}`;
+            console.log("4");
+          } else {
+            newMove = `${moveCount}. ${piece.black} ${chosenStartTile[0]}${chosenEndTile}`;
           }
         }
       }
