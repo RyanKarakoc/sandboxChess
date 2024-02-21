@@ -1,5 +1,6 @@
-const GenerateGame = ({ setShowboard }) => {
+const GenerateGame = ({ setShowboard, setGenerateAnalysisGame }) => {
   const handleOnClick = () => {
+    setGenerateAnalysisGame(true);
     setShowboard(true);
   };
   return (
