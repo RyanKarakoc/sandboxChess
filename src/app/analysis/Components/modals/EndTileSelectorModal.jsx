@@ -17,7 +17,7 @@ const EndTileSelectorModal = ({
   const [activeRowIndex, setActiveRowIndex] = useState(null);
 
   const tileColumns = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  const tileRows = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  const tileRows = [1, 2, 3, 4, 5, 6, 7, 8];
 
   const handleOutsideModalClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -54,7 +54,7 @@ const EndTileSelectorModal = ({
   useEffect(() => {
     if (activeColumnIndex !== null && activeRowIndex !== null) {
       setChosenEndTile(() => {
-        return tileColumns[activeColumnIndex] + tileRows[activeRowIndex];
+        return [tileColumns[activeColumnIndex], tileRows[activeRowIndex]];
       });
       setEndTileSelectorModal(false);
     }
