@@ -55,16 +55,16 @@ const AddMoveButton = ({
           if (endTileHasOpponentPiece) {
             newMove.push(
               moveCount,
-              piece.black,
-              `${chosenStartTile[0]}x${chosenEndTile[0]}`,
-              chosenEndTile[1]
+              piece.white,
+              [chosenStartTile[0], chosenStartTile[1]],
+              [`x${chosenEndTile[0]}`, chosenEndTile[1]]
             );
           } else {
             newMove.push(
               moveCount,
-              piece.black,
-              `${chosenStartTile[0]}${chosenEndTile[0]}`,
-              chosenEndTile[1]
+              piece.white,
+              [chosenStartTile[0], chosenStartTile[1]],
+              [chosenEndTile[0], chosenEndTile[1]]
             );
           }
         }
@@ -82,16 +82,16 @@ const AddMoveButton = ({
           if (endTileHasOpponentPiece) {
             newMove.push(
               moveCount,
-              piece.white,
-              `${chosenStartTile[0]}x${chosenEndTile[0]}`,
-              chosenEndTile[1]
+              piece.black,
+              [chosenStartTile[0], chosenStartTile[1]],
+              [`x${chosenEndTile[0]}`, chosenEndTile[1]]
             );
           } else {
             newMove.push(
               moveCount,
-              piece.white,
-              `${chosenStartTile[0]}${chosenEndTile[0]}`,
-              chosenEndTile[1]
+              piece.black,
+              [chosenStartTile[0], chosenStartTile[1]],
+              [chosenEndTile[0], chosenEndTile[1]]
             );
           }
         }
