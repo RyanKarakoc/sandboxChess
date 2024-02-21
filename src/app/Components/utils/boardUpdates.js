@@ -69,10 +69,6 @@ const updateBoardForEnPessant = (startTile, endTile, boardState, colour) => {
   if (colour === "black") {
     const pawn = new Pawn("black", blackPawn);
 
-    // newBoard[3][4]
-    console.log(startTile.row - rowOffset);
-    console.log(columnRef.indexOf(endTile.column));
-
     newBoard[startTile.row - rowOffset][columnRef.indexOf(startTile.column)] =
       null; // original position now null
     newBoard[endTile.row - rowOffset][columnRef.indexOf(endTile.column)] = pawn; // new position of pawn

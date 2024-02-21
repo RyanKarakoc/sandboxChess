@@ -157,11 +157,9 @@ const checkRookAttackingKing = (startTile, endTile, boardState, colour) => {
   // loop through rookScope
   for (let i = 0; i < rookScope.length; i++) {
     const axisArray = rookScope[i];
-    // console.log(axisArray);
     for (let j = 0; j < axisArray.length; j++) {
       if (axisArray[j].type === "king" && axisArray[j].colour !== colour) {
         const arrayContainsEnemyKing = axisArray;
-        // console.log(arrayContainsEnemyKing);
         if (
           arrayContainsEnemyKing[arrayContainsEnemyKing.length - 1].type ===
             "king" &&
