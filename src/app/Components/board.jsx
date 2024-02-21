@@ -16,6 +16,7 @@ const {
 const {
   updateBoardForCastling,
   updateBoardForEnPessant,
+  analysisBoard,
 } = require("./utils/boardUpdates.js");
 
 import blackPawn from "../../../public/blackPieces/pawn.png";
@@ -48,7 +49,12 @@ class Tile {
   }
 }
 
-const Board = ({ moves, setMoves }) => {
+const Board = ({
+  moves,
+  setMoves,
+  generateAnyalysisGame,
+  analysisMoveNumber,
+}) => {
   const initialBoardState = [
     [
       new Rook("white", whiteRook),
@@ -99,7 +105,7 @@ const Board = ({ moves, setMoves }) => {
   const [boardState, setBoardState] = useState(initialBoardState);
   const [movingPiece, setMovingPiece] = useState(null);
   const [startTile, setStartTile] = useState(null);
-  const [alternateMove, setAlternateMove] = useState(1);
+  const [alternateMove, setAlternateMove] = useState(moves.length + 1);
   const [hasWhiteKingMoved, setHasWhiteKingMoved] = useState(false);
   const [hasBlackKingMoved, setHasBlackKingMoved] = useState(false);
   const [hasKingSideWhiteRookMoved, setHasKingSideWhiteRookMoved] =
@@ -131,6 +137,12 @@ const Board = ({ moves, setMoves }) => {
     }
     board.push(rowTiles);
   }
+
+  useEffect(() => {
+    if (generateAnyalysisGame) {
+      setBoardState(analysisBoard(moves, analysisMoveNumber));
+    }
+  }, [analysisMoveNumber]);
 
   return (
     <div className="flex justify-center items-center mb-20">
@@ -199,8 +211,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         }
@@ -228,8 +242,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -267,8 +283,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         }
@@ -295,9 +313,11 @@ const Board = ({ moves, setMoves }) => {
                             ...prevMoves,
                             [
                               alternateMove,
-                              piece.blackSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              piece.whiteSymbol,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -335,8 +355,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -371,9 +393,11 @@ const Board = ({ moves, setMoves }) => {
                             ...prevMoves,
                             [
                               alternateMove,
-                              piece.blackSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              piece.whiteSymbol,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -405,8 +429,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -435,9 +461,11 @@ const Board = ({ moves, setMoves }) => {
                             ...prevMoves,
                             [
                               alternateMove,
-                              piece.blackSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              piece.whiteSymbol,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -499,9 +527,11 @@ const Board = ({ moves, setMoves }) => {
                             ...prevMoves,
                             [
                               alternateMove,
-                              piece.blackSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              piece.whiteSymbol,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -533,8 +563,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -563,9 +595,11 @@ const Board = ({ moves, setMoves }) => {
                             ...prevMoves,
                             [
                               alternateMove,
-                              piece.blackSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              piece.whiteSymbol,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -622,8 +656,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         }
@@ -652,8 +688,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
@@ -694,8 +732,10 @@ const Board = ({ moves, setMoves }) => {
                             [
                               alternateMove,
                               piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         }
@@ -723,9 +763,11 @@ const Board = ({ moves, setMoves }) => {
                             ...prevMoves,
                             [
                               alternateMove,
-                              piece.blackSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
+                              piece.whiteSymbol,
+                              [startTile.column, startTile.row],
+                              piece.takenTile
+                                ? [`x${endTile.column}`, endTile.row]
+                                : [endTile.column, endTile.row],
                             ],
                           ]);
                         } else {
