@@ -28,10 +28,10 @@ const MoveList = ({ moves }) => {
 
   return (
     <>
-      <div className="flex justify-center items-center mb-20 ">
+      <div className="flex justify-center items-center mb-2 ">
         <div
           ref={scrollableDivRef}
-          className="border-4 border-solid border-black rounded-md p-10 bg-amber-200 w-72 max-h-96 overflow-y-auto relative"
+          className="border-4 border-solid border-black rounded-md p-4 bg-amber-200 w-72 h-96 overflow-y-auto relative"
         >
           <div className="flex justify-center border-4 border-black rounded-md p-2 bg-amber-100 mb-1 sticky">
             Moves
@@ -52,7 +52,7 @@ const MoveList = ({ moves }) => {
                       key={moveIndex}
                       className={`flex justify-center border-4 border-black rounded-md p-1 ${bgColour} ${textColour} mx-1`}
                     >
-                      {`${singleMove[1]} ${singleMove[2]}${singleMove[3]}`}
+                      {`${singleMove[1]} ${singleMove[3][0]}${singleMove[3][1]}`}
                     </div>
                   );
                 })}
