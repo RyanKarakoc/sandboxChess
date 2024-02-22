@@ -101,7 +101,6 @@ const Board = ({
       new Rook("black", blackRook),
     ],
   ];
-
   const [boardState, setBoardState] = useState(initialBoardState);
   const [movingPiece, setMovingPiece] = useState(null);
   const [startTile, setStartTile] = useState(null);
@@ -144,6 +143,210 @@ const Board = ({
     }
   }, [analysisMoveNumber]);
 
+  const onMouseDown = (tile) => {
+    setStartTile(tile);
+    setMovingPiece(tile.piece);
+  };
+
+  const onDragStart = (tile) => {
+    setStartTile(tile);
+    setMovingPiece(tile.piece);
+  };
+
+  const onDrag = (tile) => {
+    tile.piece = null;
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const onDrop = (tile) => {
+    const endTile = tile;
+    const newBoard = board.map((row) => {
+      tile.piece = movingPiece;
+      return row.map((tile) => {
+        return tile.piece;
+      });
+    });
+
+    let piece = null;
+
+    const type = movingPiece.type;
+    const pieceColour = movingPiece.colour;
+
+    if (pieceColour === "white") {
+      if (type === "pawn") piece = new Pawn("white", whitePawn);
+      else if (type === "rook") piece = new Rook("white", whiteRook);
+      else if (type === "knight") piece = new Knight("white", whiteKnight);
+      else if (type === "bishop") piece = new Bishop("white", whiteBishop);
+      else if (type === "queen") piece = new Queen("white", whiteQueen);
+      else if (type === "king") piece = new King("white", whiteKing);
+    } else {
+      if (type === "pawn") piece = new Pawn("black", blackPawn);
+      else if (type === "rook") piece = new Rook("black", blackRook);
+      else if (type === "knight") piece = new Knight("black", blackKnight);
+      else if (type === "bishop") piece = new Bishop("black", blackBishop);
+      else if (type === "queen") piece = new Queen("black", blackQueen);
+      else if (type === "king") piece = new King("black", blackKing);
+    }
+
+    const colourToMove = alternateMove % 2 === 1 ? "white" : "black";
+
+    const lastMove = moves[moves.length - 1] || [];
+
+    const haveKingsMoved = {
+      whiteKing: hasWhiteKingMoved,
+      blackKing: hasBlackKingMoved,
+    };
+    const haveRooksMoved = {
+      whiteRooks: {
+        queenSideRook: hasQueenSideWhiteRookMoved,
+        kingSideRook: hasKingSideWhiteRookMoved,
+      },
+      blackRooks: {
+        queenSideRook: hasQueenSideBlackRookMoved,
+        kingSideRook: hasKingSideBlackRookMoved,
+      },
+    };
+
+    const enPessant =
+      piece.colour === colourToMove
+        ? checkEnPassant(
+            startTile,
+            endTile,
+            boardState,
+            movingPiece.colour,
+            lastMove
+          )
+        : false;
+
+    const isCastleLegal =
+      piece.colour === colourToMove
+        ? canKingCastle(
+            startTile,
+            endTile,
+            boardState,
+            movingPiece.colour,
+            haveKingsMoved,
+            haveRooksMoved
+          )
+        : false;
+
+    const isMoveLegal =
+      piece.colour === colourToMove
+        ? piece.movement(
+            startTile,
+            endTile,
+            boardState,
+            movingPiece.colour,
+            lastMove
+          )
+        : false;
+
+    if (enPessant) {
+      piece.playSound(
+        startTile,
+        endTile,
+        boardState,
+        movingPiece.colour,
+        lastMove
+      );
+      const boardAfterEnPassant = updateBoardForEnPessant(
+        startTile,
+        endTile,
+        boardState,
+        movingPiece.colour
+      );
+      setBoardState(boardAfterEnPassant);
+      setAlternateMove(alternateMove + 1);
+      setMoves((prevMoves) => [
+        ...prevMoves,
+        [
+          alternateMove,
+          piece.whiteSymbol,
+          [startTile.column, startTile.row],
+          piece.takenTile
+            ? [`x${endTile.column}`, endTile.row]
+            : [endTile.column, endTile.row],
+        ],
+      ]);
+    } else if (isCastleLegal) {
+      const boardAfterCastling = updateBoardForCastling(
+        startTile,
+        endTile,
+        boardState,
+        movingPiece.colour
+      );
+      piece.playSound(
+        startTile,
+        endTile,
+        boardState,
+        movingPiece.colour,
+        haveKingsMoved,
+        haveRooksMoved
+      );
+      setBoardState(boardAfterCastling);
+      setAlternateMove(alternateMove + 1);
+      setMoves((prevMoves) => [
+        ...prevMoves,
+        [
+          alternateMove,
+          piece.whiteSymbol,
+          [startTile.column, startTile.row],
+          piece.takenTile
+            ? [`x${endTile.column}`, endTile.row]
+            : [endTile.column, endTile.row],
+        ],
+      ]);
+    } else {
+      if (isMoveLegal) {
+        piece.colour === "white"
+          ? [
+              piece.type === "king" ? setHasWhiteKingMoved(true) : null,
+              startTile.column === "a" && startTile.row === 1
+                ? setHasQueenSideWhiteRookMoved(true)
+                : null,
+              startTile.column === "h" && startTile.row === 1
+                ? setHasKingSideWhiteRookMoved(true)
+                : null,
+            ]
+          : [
+              piece.type === "king" ? setHasBlackKingMoved(true) : null,
+              startTile.column === "a" && startTile.row === 8
+                ? setHasQueenSideBlackRookMoved(true)
+                : null,
+              startTile.column === "h" && startTile.row === 8
+                ? setHasKingSideBlackRookMoved(true)
+                : null,
+            ];
+
+        piece.playSound(
+          startTile,
+          endTile,
+          boardState,
+          movingPiece.colour,
+          lastMove
+        );
+        setBoardState(newBoard.reverse());
+        setAlternateMove(alternateMove + 1);
+        setMoves((prevMoves) => [
+          ...prevMoves,
+          [
+            alternateMove,
+            piece.whiteSymbol,
+            [startTile.column, startTile.row],
+            piece.takenTile
+              ? [`x${endTile.column}`, endTile.row]
+              : [endTile.column, endTile.row],
+          ],
+        ]);
+      }
+    }
+
+    setMovingPiece(piece);
+  };
+
   return (
     <div className="flex justify-center items-center mb-20">
       <div className="border-4 border-solid border-black rounded-md p-10 bg-amber-200">
@@ -154,628 +357,11 @@ const Board = ({
                 <div
                   className={`relative h-10 md:h-20 w-10 md:w-20 select-none ${tile.colour}`}
                   key={`${rowIndex}-${columnIndex}`}
-                  onMouseDown={(e) => {
-                    setStartTile(tile);
-                    setMovingPiece(tile.piece);
-                  }}
-                  onDragStart={(e) => {
-                    setStartTile(tile);
-                    setMovingPiece(tile.piece);
-                  }}
-                  onDrag={(e) => {
-                    tile.piece = null;
-                  }}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                  }}
-                  onDrop={(e) => {
-                    const endTile = tile;
-                    const newBoard = board.map((row) => {
-                      tile.piece = movingPiece;
-                      return row.map((tile) => {
-                        return tile.piece;
-                      });
-                    });
-
-                    if (movingPiece.type === "pawn") {
-                      const lastMove = moves[moves.length - 1] || [];
-                      if (movingPiece.colour === "white") {
-                        const piece = new Pawn("white", whitePawn);
-                        if (
-                          checkEnPassant(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          );
-                          const boardAfterEnPassant = updateBoardForEnPessant(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(boardAfterEnPassant);
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        }
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      } else {
-                        const piece = new Pawn("black", blackPawn);
-                        if (
-                          checkEnPassant(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          );
-                          const boardAfterEnPassant = updateBoardForEnPessant(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(boardAfterEnPassant);
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        }
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            lastMove
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      }
-                    } else if (movingPiece.type === "rook") {
-                      if (movingPiece.colour === "white") {
-                        const piece = new Rook("white", whiteRook);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          if (startTile.row === 1 && startTile.column === "a") {
-                            setHasQueenSideWhiteRookMoved(true);
-                          }
-                          if (startTile.row === 1 && startTile.column === "h") {
-                            setHasKingSideWhiteRookMoved(true);
-                          }
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      } else {
-                        const piece = new Rook("black", blackRook);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          if (startTile.row === 8 && startTile.column === "a") {
-                            setHasQueenSideBlackRookMoved(true);
-                          }
-                          if (startTile.row === 8 && startTile.column === "h") {
-                            setHasKingSideBlackRookMoved(true);
-                          }
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      }
-                    } else if (movingPiece.type === "knight") {
-                      if (movingPiece.colour === "white") {
-                        const piece = new Knight("white", whiteKnight);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      } else {
-                        const piece = new Knight("black", blackKnight);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      }
-                    } else if (movingPiece.type === "bishop") {
-                      if (movingPiece.colour === "white") {
-                        const piece = new Bishop("white", whiteBishop);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              piece.takenTile || endTile.column,
-                              endTile.row,
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      } else {
-                        const piece = new Bishop("black", blackBishop);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      }
-                    } else if (movingPiece.type === "queen") {
-                      if (movingPiece.colour === "white") {
-                        const piece = new Queen("white", whiteQueen);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      } else {
-                        const piece = new Queen("black", blackQueen);
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      }
-                    } else if (movingPiece.type === "king") {
-                      const haveKingsMoved = {
-                        whiteKing: hasWhiteKingMoved,
-                        blackKing: hasBlackKingMoved,
-                      };
-                      const haveRooksMoved = {
-                        whiteRooks: {
-                          queenSideRook: hasQueenSideWhiteRookMoved,
-                          kingSideRook: hasKingSideWhiteRookMoved,
-                        },
-                        blackRooks: {
-                          queenSideRook: hasQueenSideBlackRookMoved,
-                          kingSideRook: hasKingSideBlackRookMoved,
-                        },
-                      };
-                      if (movingPiece.colour === "white") {
-                        const piece = new King("white", whiteKing);
-                        if (
-                          canKingCastle(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            haveKingsMoved,
-                            haveRooksMoved
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          setHasWhiteKingMoved(true);
-                          const boardAfterCastling = updateBoardForCastling(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            haveKingsMoved,
-                            haveRooksMoved
-                          );
-                          setBoardState(boardAfterCastling);
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        }
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 1
-                        ) {
-                          setHasWhiteKingMoved(true);
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            haveKingsMoved,
-                            haveRooksMoved
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      } else {
-                        const piece = new King("black", blackKing);
-                        if (
-                          canKingCastle(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            haveKingsMoved,
-                            haveRooksMoved
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          setHasBlackKingMoved(true);
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            haveKingsMoved,
-                            haveRooksMoved
-                          );
-                          const boardAfterCastling = updateBoardForCastling(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          );
-                          setBoardState(boardAfterCastling);
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        }
-                        if (
-                          piece.movement(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour
-                          ) &&
-                          alternateMove % 2 === 0
-                        ) {
-                          setHasBlackKingMoved(true);
-                          piece.playSound(
-                            startTile,
-                            endTile,
-                            boardState,
-                            movingPiece.colour,
-                            haveKingsMoved,
-                            haveRooksMoved
-                          );
-                          setBoardState(newBoard.reverse());
-                          setAlternateMove(alternateMove + 1);
-                          setMoves((prevMoves) => [
-                            ...prevMoves,
-                            [
-                              alternateMove,
-                              piece.whiteSymbol,
-                              [startTile.column, startTile.row],
-                              piece.takenTile
-                                ? [`x${endTile.column}`, endTile.row]
-                                : [endTile.column, endTile.row],
-                            ],
-                          ]);
-                        } else {
-                          setMovingPiece(piece);
-                        }
-                      }
-                    }
-                  }}
+                  onMouseDown={(e) => onMouseDown(tile)}
+                  onDragStart={(e) => onDragStart(tile)}
+                  onDrag={(e) => onDrag(tile)}
+                  onDragOver={onDragOver}
+                  onDrop={(e) => onDrop(tile)}
                 >
                   <div>
                     {/* Display Pieces */}
