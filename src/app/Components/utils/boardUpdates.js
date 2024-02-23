@@ -141,14 +141,6 @@ const analysisBoard = (moves, moveNumber) => {
     const endTileColumn = moves[i][3][0][moves[i][3][0].length - 1];
     const endTileRow = moves[i][3][1];
 
-    const moveBreakdown = [
-      piece,
-      startTileColumn,
-      startTileRow,
-      endTileColumn,
-      endTileRow,
-    ];
-
     const colour = i % 2 === 0 ? "white" : "black";
     const newBoardStartColumn = columnRef.indexOf(startTileColumn);
     const newBoardStartRow = startTileRow - boardOffsett;
