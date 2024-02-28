@@ -1,5 +1,9 @@
+import { useGlobalState } from "@/app/Components/context/GlobabStateProvider";
+
 const GenerateGame = ({ setShowboard, setGenerateAnalysisGame }) => {
+  const { setAnalysisMoveNumber } = useGlobalState();
   const handleOnClick = () => {
+    setAnalysisMoveNumber(0);
     setGenerateAnalysisGame(true);
     setShowboard(true);
   };
