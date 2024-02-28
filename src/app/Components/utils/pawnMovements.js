@@ -1,8 +1,7 @@
 const checkEnPassant = (startTile, endTile, boardState, colour, prevMove) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const lastMoveTile = [];
-  console.log(prevMove);
-  if (prevMove[0] === "O-O") {
+  if (prevMove === null || prevMove[0] === "O-O" || prevMove[0] === "O-O-O") {
     return false;
   }
   if (prevMove) {
