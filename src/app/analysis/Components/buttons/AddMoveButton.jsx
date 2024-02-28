@@ -1,6 +1,7 @@
+import { useGlobalState } from "@/app/Components/context/GlobabStateProvider";
+import { useEffect } from "react";
+
 const AddMoveButton = ({
-  moves,
-  setMoves,
   chosenPiece,
   chosenStartTile,
   chosenEndTile,
@@ -9,6 +10,7 @@ const AddMoveButton = ({
   board,
   setBoard,
 }) => {
+  const { setMoves, setAnalysisMoves } = useGlobalState();
   const handleOnClick = () => {
     // getting the piece type from the image path
     const str = chosenPiece.src;
@@ -24,7 +26,7 @@ const AddMoveButton = ({
       { type: "king", white: "♚", black: "♔" },
     ];
 
-    let newMove = [];
+    const newMove = [];
 
     const moveCount = count + 1;
 
@@ -109,6 +111,10 @@ const AddMoveButton = ({
         setBoard(newBoard);
       }
     }
+
+    setAnalysisMoves((prevMoves) => {
+      return [...prevMoves, newMove];
+    });
 
     setMoves((prevMoves) => {
       return [...prevMoves, newMove];
