@@ -3,6 +3,7 @@ import { MdSkipNext } from "react-icons/md";
 
 const NextMoveButton = () => {
   const {
+    moves,
     alternateMove,
     setAlternateMove,
     analysisMoveNumber,

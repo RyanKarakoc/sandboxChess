@@ -2,8 +2,13 @@ import { useGlobalState } from "@/app/Components/context/GlobabStateProvider";
 import { LuChevronFirst } from "react-icons/lu";
 
 const FirstMoveButton = () => {
-  const { setMoves, analysisMoves, setAlternateMove, setAnalysisMoveNumber } =
-    useGlobalState();
+  const {
+    setMoves,
+    analysisMoves,
+    setAlternateMove,
+    analysisMoveNumber,
+    setAnalysisMoveNumber,
+  } = useGlobalState();
   const isDisabled = analysisMoveNumber === 0 ? true : false;
   const handleOnClick = () => {
     setAlternateMove(1);
