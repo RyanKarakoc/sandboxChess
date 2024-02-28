@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 // import { Pawn, Rook, Knight, Bishop, Queen, King } from "./piece.js";
 
@@ -33,6 +33,7 @@ import whiteQueen from "../../../public/whitePieces/queen.png";
 import whiteKing from "../../../public/whitePieces/king.png";
 import { canKingCastle } from "./utils/kingMovement";
 import { checkEnPassant } from "./utils/pawnMovements";
+const { useGlobalState } = require("./context/GlobabStateProvider.jsx");
 
 class Tile {
   constructor(row, column, piece) {
@@ -49,12 +50,7 @@ class Tile {
   }
 }
 
-const Board = ({
-  moves,
-  setMoves,
-  generateAnyalysisGame,
-  analysisMoveNumber,
-}) => {
+const Board = ({ generateAnyalysisGame }) => {
   const initialBoardState = [
     [
       new Rook("white", whiteRook),
@@ -104,7 +100,6 @@ const Board = ({
   const [boardState, setBoardState] = useState(initialBoardState);
   const [movingPiece, setMovingPiece] = useState(null);
   const [startTile, setStartTile] = useState(null);
-  const [alternateMove, setAlternateMove] = useState(moves.length + 1);
   const [hasWhiteKingMoved, setHasWhiteKingMoved] = useState(false);
   const [hasBlackKingMoved, setHasBlackKingMoved] = useState(false);
   const [hasKingSideWhiteRookMoved, setHasKingSideWhiteRookMoved] =
@@ -115,6 +110,34 @@ const Board = ({
     useState(false);
   const [hasQueenSideBlackRookMoved, setHasQueenSideBlackRookMoved] =
     useState(false);
+
+  const {
+    alternateMove,
+    setAlternateMove,
+    moves,
+    setMoves,
+    movesPriorToDeviation,
+    setMovesPriorToDeviation,
+    analysisMoves,
+    analysisMoveNumber,
+    setAnalysisMoveNumber,
+  } = useGlobalState();
+
+  const haveKingsMoved = {
+    whiteKing: hasWhiteKingMoved,
+    blackKing: hasBlackKingMoved,
+  };
+
+  const haveRooksMoved = {
+    whiteRooks: {
+      queenSideRook: hasQueenSideWhiteRookMoved,
+      kingSideRook: hasKingSideWhiteRookMoved,
+    },
+    blackRooks: {
+      queenSideRook: hasQueenSideBlackRookMoved,
+      kingSideRook: hasKingSideBlackRookMoved,
+    },
+  };
 
   const board = [];
 
@@ -139,7 +162,7 @@ const Board = ({
 
   useEffect(() => {
     if (generateAnyalysisGame) {
-      setBoardState(analysisBoard(moves, analysisMoveNumber));
+      setBoardState(analysisBoard(moves, analysisMoveNumber, boardState));
     }
   }, [analysisMoveNumber]);
 
@@ -171,9 +194,9 @@ const Board = ({
     });
 
     let piece = null;
-
     const type = movingPiece.type;
     const pieceColour = movingPiece.colour;
+    const colourToMove = alternateMove % 2 === 1 ? "white" : "black";
 
     if (pieceColour === "white") {
       if (type === "pawn") piece = new Pawn("white", whitePawn);
@@ -182,7 +205,7 @@ const Board = ({
       else if (type === "bishop") piece = new Bishop("white", whiteBishop);
       else if (type === "queen") piece = new Queen("white", whiteQueen);
       else if (type === "king") piece = new King("white", whiteKing);
-    } else {
+    } else if (pieceColour === "black") {
       if (type === "pawn") piece = new Pawn("black", blackPawn);
       else if (type === "rook") piece = new Rook("black", blackRook);
       else if (type === "knight") piece = new Knight("black", blackKnight);
@@ -191,119 +214,102 @@ const Board = ({
       else if (type === "king") piece = new King("black", blackKing);
     }
 
-    const colourToMove = alternateMove % 2 === 1 ? "white" : "black";
+    if (pieceColour === colourToMove) {
+      const lastMove = moves[moves.length - 1] || null;
+      // enPessant movement
+      if (
+        checkEnPassant(startTile, endTile, boardState, pieceColour, lastMove)
+      ) {
+        // play the piece movements sound
+        piece.playSound(startTile, endTile, boardState, pieceColour, lastMove);
+        // create a new boardState for enpessant
+        const boardAfterEnPassant = updateBoardForEnPessant(
+          startTile,
+          endTile,
+          boardState,
+          pieceColour
+        );
+        // set boardState for enpessant
+        setBoardState(boardAfterEnPassant);
+        // increment the alternateMove
+        setAlternateMove(alternateMove + 1);
+        // create the move format
+        setMoves((prevMoves) => [
+          ...prevMoves,
+          [
+            alternateMove,
+            pieceColour === "white" ? piece.whiteSymbol : piece.blackSymbol,
+            [startTile.column, startTile.row],
+            piece.takenTile
+              ? [`x${endTile.column}`, endTile.row]
+              : [endTile.column, endTile.row],
+          ],
+        ]);
+        // if analysis game increment analysisNumber and alternateMove by 1
+        if (generateAnyalysisGame) {
+          setMovesPriorToDeviation(analysisMoves.slice(0, alternateMove - 1));
+          setAnalysisMoveNumber(analysisMoveNumber + 1);
+          setAlternateMove(alternateMove + 1);
+        }
+      }
+      // castling Movement
+      else if (
+        canKingCastle(
+          startTile,
+          endTile,
+          boardState,
+          pieceColour,
+          haveKingsMoved,
+          haveRooksMoved
+        )
+      ) {
+        // play the piece movements sound
+        piece.playSound(
+          startTile,
+          endTile,
+          boardState,
+          pieceColour,
+          haveKingsMoved,
+          haveRooksMoved
+        );
+        const boardAfterCastling = updateBoardForCastling(
+          startTile,
+          endTile,
+          boardState,
+          pieceColour
+        );
+        // add custom castling boardState
+        setBoardState(boardAfterCastling);
+        // change the move turn
+        setAlternateMove(alternateMove + 1);
+        // create the move format
+        setMoves((prevMoves) => [
+          ...prevMoves,
+          [
+            alternateMove,
+            pieceColour === "white" ? piece.whiteSymbol : piece.blackSymbol,
+            [startTile.column, startTile.row],
+            piece.takenTile
+              ? [`x${endTile.column}`, endTile.row]
+              : [endTile.column, endTile.row],
+          ],
+        ]);
+        // if analysis game increment analysisNumber and alternateMove by 1
+        if (generateAnyalysisGame) {
+          setMovesPriorToDeviation(analysisMoves.slice(0, alternateMove - 1));
+          setAnalysisMoveNumber(analysisMoveNumber + 1);
+          setAlternateMove(alternateMove + 1);
+        }
+      }
 
-    const lastMove = moves[moves.length - 1] || [];
-
-    const haveKingsMoved = {
-      whiteKing: hasWhiteKingMoved,
-      blackKing: hasBlackKingMoved,
-    };
-    const haveRooksMoved = {
-      whiteRooks: {
-        queenSideRook: hasQueenSideWhiteRookMoved,
-        kingSideRook: hasKingSideWhiteRookMoved,
-      },
-      blackRooks: {
-        queenSideRook: hasQueenSideBlackRookMoved,
-        kingSideRook: hasKingSideBlackRookMoved,
-      },
-    };
-
-    const enPessant =
-      piece.colour === colourToMove
-        ? checkEnPassant(
-            startTile,
-            endTile,
-            boardState,
-            movingPiece.colour,
-            lastMove
-          )
-        : false;
-
-    const isCastleLegal =
-      piece.colour === colourToMove
-        ? canKingCastle(
-            startTile,
-            endTile,
-            boardState,
-            movingPiece.colour,
-            haveKingsMoved,
-            haveRooksMoved
-          )
-        : false;
-
-    const isMoveLegal =
-      piece.colour === colourToMove
-        ? piece.movement(
-            startTile,
-            endTile,
-            boardState,
-            movingPiece.colour,
-            lastMove
-          )
-        : false;
-
-    if (enPessant) {
-      piece.playSound(
-        startTile,
-        endTile,
-        boardState,
-        movingPiece.colour,
-        lastMove
-      );
-      const boardAfterEnPassant = updateBoardForEnPessant(
-        startTile,
-        endTile,
-        boardState,
-        movingPiece.colour
-      );
-      setBoardState(boardAfterEnPassant);
-      setAlternateMove(alternateMove + 1);
-      setMoves((prevMoves) => [
-        ...prevMoves,
-        [
-          alternateMove,
-          piece.whiteSymbol,
-          [startTile.column, startTile.row],
-          piece.takenTile
-            ? [`x${endTile.column}`, endTile.row]
-            : [endTile.column, endTile.row],
-        ],
-      ]);
-    } else if (isCastleLegal) {
-      const boardAfterCastling = updateBoardForCastling(
-        startTile,
-        endTile,
-        boardState,
-        movingPiece.colour
-      );
-      piece.playSound(
-        startTile,
-        endTile,
-        boardState,
-        movingPiece.colour,
-        haveKingsMoved,
-        haveRooksMoved
-      );
-      setBoardState(boardAfterCastling);
-      setAlternateMove(alternateMove + 1);
-      setMoves((prevMoves) => [
-        ...prevMoves,
-        [
-          alternateMove,
-          piece.whiteSymbol,
-          [startTile.column, startTile.row],
-          piece.takenTile
-            ? [`x${endTile.column}`, endTile.row]
-            : [endTile.column, endTile.row],
-        ],
-      ]);
-    } else {
-      if (isMoveLegal) {
-        piece.colour === "white"
+      // normal piece movements
+      else if (
+        piece.movement(startTile, endTile, boardState, pieceColour, lastMove)
+      ) {
+        // ternary to control king / rook movement for castling
+        pieceColour === "white"
           ? [
-              piece.type === "king" ? setHasWhiteKingMoved(true) : null,
+              type === "king" ? setHasWhiteKingMoved(true) : null,
               startTile.column === "a" && startTile.row === 1
                 ? setHasQueenSideWhiteRookMoved(true)
                 : null,
@@ -312,7 +318,7 @@ const Board = ({
                 : null,
             ]
           : [
-              piece.type === "king" ? setHasBlackKingMoved(true) : null,
+              type === "king" ? setHasBlackKingMoved(true) : null,
               startTile.column === "a" && startTile.row === 8
                 ? setHasQueenSideBlackRookMoved(true)
                 : null,
@@ -320,21 +326,23 @@ const Board = ({
                 ? setHasKingSideBlackRookMoved(true)
                 : null,
             ];
-
-        piece.playSound(
-          startTile,
-          endTile,
-          boardState,
-          movingPiece.colour,
-          lastMove
-        );
+        // play the piece movements sound
+        piece.playSound(startTile, endTile, boardState, pieceColour, lastMove);
         setBoardState(newBoard.reverse());
+        // change the move turn
         setAlternateMove(alternateMove + 1);
+        // if analysis game increment analysisNumber and alternateMove by 1
+        if (generateAnyalysisGame) {
+          setMovesPriorToDeviation(analysisMoves.slice(0, alternateMove - 1));
+          setAnalysisMoveNumber(analysisMoveNumber + 1);
+          setAlternateMove(alternateMove + 1);
+        }
+        // create the move format
         setMoves((prevMoves) => [
           ...prevMoves,
           [
             alternateMove,
-            piece.whiteSymbol,
+            pieceColour === "white" ? piece.whiteSymbol : piece.blackSymbol,
             [startTile.column, startTile.row],
             piece.takenTile
               ? [`x${endTile.column}`, endTile.row]
@@ -343,9 +351,172 @@ const Board = ({
         ]);
       }
     }
+    // const enPessant =
+    //   piece.colour === colourToMove
+    //     ? checkEnPassant(startTile, endTile, boardState, pieceColour, lastMove)
+    //     : false;
+
+    // const isCastleLegal =
+    //   piece.colour === colourToMove
+    //     ? canKingCastle(
+    //         startTile,
+    //         endTile,
+    //         boardState,
+    //         pieceColour,
+    //         haveKingsMoved,
+    //         haveRooksMoved
+    //       )
+    //     : false;
+
+    // const isMoveLegal =
+    //   piece.colour === colourToMove
+    //     ? piece.movement(startTile, endTile, boardState, pieceColour, lastMove)
+    //     : false;
+
+    // if (enPessant) {
+    //   piece.playSound(startTile, endTile, boardState, pieceColour, lastMove);
+    //   const boardAfterEnPassant = updateBoardForEnPessant(
+    //     startTile,
+    //     endTile,
+    //     boardState,
+    //     pieceColour
+    //   );
+    //   setBoardState(boardAfterEnPassant);
+    //   setAlternateMove(alternateMove + 1);
+    //   setMoves((prevMoves) => [
+    //     ...prevMoves,
+    //     [
+    //       alternateMove,
+    //       pieceColour === "white" ? piece.whiteSymbol : piece.blackSymbol,
+    //       [startTile.column, startTile.row],
+    //       piece.takenTile
+    //         ? [`x${endTile.column}`, endTile.row]
+    //         : [endTile.column, endTile.row],
+    //     ],
+    //   ]);
+    //   if (generateAnyalysisGame) {
+    //     setMovesPriorToDeviation(analysisMoves.slice(0, alternateMove - 1));
+    //     setAnalysisMoveNumber(analysisMoveNumber + 1);
+    //     setAlternateMove(alternateMove + 1);
+    //   }
+    // } else if (isCastleLegal) {
+    //   // terniary for castling conditions
+    //   piece.colour === "white"
+    //     ? [
+    //         piece.type === "king" ? setHasWhiteKingMoved(true) : null,
+    //         startTile.column === "a" && startTile.row === 1
+    //           ? setHasQueenSideWhiteRookMoved(true)
+    //           : null,
+    //         startTile.column === "h" && startTile.row === 1
+    //           ? setHasKingSideWhiteRookMoved(true)
+    //           : null,
+    //       ]
+    //     : [
+    //         piece.type === "king" ? setHasBlackKingMoved(true) : null,
+    //         startTile.column === "a" && startTile.row === 8
+    //           ? setHasQueenSideBlackRookMoved(true)
+    //           : null,
+    //         startTile.column === "h" && startTile.row === 8
+    //           ? setHasKingSideBlackRookMoved(true)
+    //           : null,
+    //       ];
+    //   piece.playSound(
+    //     startTile,
+    //     endTile,
+    //     boardState,
+    //     pieceColour,
+    //     haveKingsMoved,
+    //     haveRooksMoved
+    //   );
+    //   const boardAfterCastling = updateBoardForCastling(
+    //     startTile,
+    //     endTile,
+    //     boardState,
+    //     pieceColour
+    //   );
+    //   setBoardState(boardAfterCastling);
+    //   setAlternateMove(alternateMove + 1);
+    //   setMoves((prevMoves) => [
+    //     ...prevMoves,
+    //     [
+    //       alternateMove,
+    //       pieceColour === "white" ? piece.whiteSymbol : piece.blackSymbol,
+    //       [startTile.column, startTile.row],
+    //       piece.takenTile
+    //         ? [`x${endTile.column}`, endTile.row]
+    //         : [endTile.column, endTile.row],
+    //     ],
+    //   ]);
+    //   if (generateAnyalysisGame) {
+    //     setMovesPriorToDeviation(analysisMoves.slice(0, alternateMove - 1));
+    //     setAnalysisMoveNumber(analysisMoveNumber + 1);
+    //     setAlternateMove(alternateMove + 1);
+    //   }
+    // } else {
+    //   if (isMoveLegal) {
+    //     if (generateAnyalysisGame) {
+    //       setMovesPriorToDeviation(analysisMoves.slice(0, alternateMove - 1));
+    //       setAnalysisMoveNumber(analysisMoveNumber + 1);
+    //       setAlternateMove(alternateMove + 1);
+    //     }
+    //     // terniary for castling conditions
+    //     piece.colour === "white"
+    //       ? [
+    //           piece.type === "king" ? setHasWhiteKingMoved(true) : null,
+    //           startTile.column === "a" && startTile.row === 1
+    //             ? setHasQueenSideWhiteRookMoved(true)
+    //             : null,
+    //           startTile.column === "h" && startTile.row === 1
+    //             ? setHasKingSideWhiteRookMoved(true)
+    //             : null,
+    //         ]
+    //       : [
+    //           piece.type === "king" ? setHasBlackKingMoved(true) : null,
+    //           startTile.column === "a" && startTile.row === 8
+    //             ? setHasQueenSideBlackRookMoved(true)
+    //             : null,
+    //           startTile.column === "h" && startTile.row === 8
+    //             ? setHasKingSideBlackRookMoved(true)
+    //             : null,
+    //         ];
+
+    //     piece.playSound(startTile, endTile, boardState, pieceColour, lastMove);
+    //     setBoardState(newBoard.reverse());
+    //     generateAnyalysisGame
+    //       ? setAnalysisMoveNumber(analysisMoveNumber + 1)
+    //       : setAlternateMove(alternateMove + 1);
+
+    //     setMoves((prevMoves) => [
+    //       ...prevMoves,
+    //       [
+    //         alternateMove,
+    //         pieceColour === "white" ? piece.whiteSymbol : piece.blackSymbol,
+    //         [startTile.column, startTile.row],
+    //         piece.takenTile
+    //           ? [`x${endTile.column}`, endTile.row]
+    //           : [endTile.column, endTile.row],
+    //       ],
+    //     ]);
+    //   }
+    // }
 
     setMovingPiece(piece);
   };
+
+  console.log(
+    moves.length,
+    "moves.length",
+    movesPriorToDeviation.length,
+    "movesPriorToDeviation",
+    analysisMoves.length,
+    "analysisMoves"
+  );
+  console.log(
+    alternateMove,
+    "alternateMove",
+    analysisMoveNumber,
+    "analysisMoveNumber"
+  );
 
   return (
     <div className="flex justify-center items-center mb-20">
