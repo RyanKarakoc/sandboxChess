@@ -63,7 +63,7 @@ const updateBoardForEnPessant = (startTile, endTile, boardState, colour) => {
       null; // original position now null
     newBoard[endTile.row - rowOffset][columnRef.indexOf(endTile.column)] = pawn; // new position of pawn
     newBoard[startTile.row - rowOffset][columnRef.indexOf(endTile.column)] =
-      null; // removed the taken pawn
+      null; // removes[i]d the taken pawn
   }
 
   if (colour === "black") {
@@ -73,15 +73,19 @@ const updateBoardForEnPessant = (startTile, endTile, boardState, colour) => {
       null; // original position now null
     newBoard[endTile.row - rowOffset][columnRef.indexOf(endTile.column)] = pawn; // new position of pawn
     newBoard[startTile.row - rowOffset][columnRef.indexOf(endTile.column)] =
-      null; // removed the taken pawn
+      null; // removesd the taken pawn
   }
   return newBoard;
 };
 
-const analysisBoard = (moves, moveNumber) => {
+const analysisBoard = (moves, movesNumber) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const boardOffsett = 1;
-  const count = moveNumber;
+  const count = movesNumber;
+  let whiteKingSideCastle = false;
+  let whiteSideQueenCastle = false;
+  let blackKingSideCastle = false;
+  let blackQueenSideCastle = false;
 
   const newBoard = [
     [
@@ -135,44 +139,106 @@ const analysisBoard = (moves, moveNumber) => {
   }
 
   for (let i = 0; i < count; i++) {
-    const piece = moves[i][1];
-    const startTileColumn = moves[i][2][0];
-    const startTileRow = moves[i][2][1];
-    const endTileColumn = moves[i][3][0][moves[i][3][0].length - 1];
-    const endTileRow = moves[i][3][1];
+    const newBoardStartColumn = columnRef.indexOf(moves[i][2][0]);
+    const newBoardStartRow = moves[i][2][1] - boardOffsett;
+    const newBoardEndColumn = columnRef.indexOf(
+      moves[i][3][0][moves[i][3][0].length - 1]
+    );
+    const newBoardEndRow = moves[i][3][1] - boardOffsett;
 
-    const colour = i % 2 === 0 ? "white" : "black";
-    const newBoardStartColumn = columnRef.indexOf(startTileColumn);
-    const newBoardStartRow = startTileRow - boardOffsett;
-    const newBoardEndColumn = columnRef.indexOf(endTileColumn);
-    const newBoardEndRow = endTileRow - boardOffsett;
+    const enPessantMove =
+      newBoard[newBoardEndRow][newBoardEndColumn] === null &&
+      moves[i][3][0][0] === "x";
 
-    let newPiece = null;
-
-    if (piece === "♟︎") newPiece = new Pawn("white", whitePawn);
-    if (piece === "♜") newPiece = new Rook("white", whiteRook);
-    if (piece === "♞") newPiece = new Pawn("white", whiteKnight);
-    if (piece === "♝") newPiece = new Rook("white", whiteBishop);
-    if (piece === "♛") newPiece = new Rook("white", whiteQueen);
-    if (piece === "♚") newPiece = new Rook("white", whiteKing);
-
-    if (piece === "♙") newPiece = new Pawn("black", blackPawn);
-    if (piece === "♖") newPiece = new Rook("black", blackRook);
-    if (piece === "♘") newPiece = new Pawn("black", blackKnight);
-    if (piece === "♗") newPiece = new Rook("black", blackBishop);
-    if (piece === "♕") newPiece = new Rook("black", blackQueen);
-    if (piece === "♔") newPiece = new Rook("black", blackKing);
-
-    if (newPiece) {
-      newPiece.playSound(
-        { column: startTileColumn, row: startTileRow },
-        { column: endTileColumn, row: endTileRow },
-        newBoard,
-        colour,
-        moves[moves.length - 1]
-      );
+    if (moves[i][1] === "♟︎" && enPessantMove) {
+      const newBoardEnPessantTakenRow = 4;
       newBoard[newBoardStartRow][newBoardStartColumn] = null;
-      newBoard[newBoardEndRow][newBoardEndColumn] = newPiece;
+      newBoard[newBoardEnPessantTakenRow][newBoardEndColumn] = null;
+      newBoard[newBoardEndRow][newBoardEndColumn] = new Pawn(
+        "white",
+        whitePawn
+      );
+      enPessant = true;
+    } else if (moves[i][1] === "♙" && enPessantMove) {
+      const newBoardEnPessantTakenRow = 3;
+      newBoard[newBoardStartRow][newBoardStartColumn] = null;
+      newBoard[newBoardEnPessantTakenRow][newBoardEndColumn] = null;
+      newBoard[newBoardEndRow][newBoardEndColumn] = new Pawn(
+        "black",
+        blackPawn
+      );
+      enPessant = true;
+    } else if (moves[i][1] === "♚") {
+      if (
+        columnRef.indexOf(moves[i][2][0]) -
+          columnRef.indexOf(moves[i][3][0]) ===
+          -2 &&
+        !whiteKingSideCastle
+      ) {
+        newBoard[0][7] = null;
+        newBoard[0][5] = new Rook("white", whiteRook);
+        newBoard[0][4] = null;
+        newBoard[0][6] = new King("white", whiteKing);
+      } else if (
+        columnRef.indexOf(moves[i][2][0]) -
+          columnRef.indexOf(moves[i][3][0]) ===
+          2 &&
+        !whiteSideQueenCastle
+      ) {
+        newBoard[0][0] = null;
+        newBoard[0][3] = new Rook("white", whiteRook);
+        newBoard[0][4] = null;
+        newBoard[0][2] = new King("white", whiteKing);
+      }
+    } else if (moves[i][1] === "♔") {
+      if (
+        columnRef.indexOf(moves[i][2][0]) -
+          columnRef.indexOf(moves[i][3][0]) ===
+          -2 &&
+        !blackKingSideCastle
+      ) {
+        newBoard[7][7] = null;
+        newBoard[7][5] = new Rook("black", blackRook);
+        newBoard[7][4] = null;
+        newBoard[7][6] = new King("black", blackKing);
+      } else if (
+        columnRef.indexOf(moves[i][2][0]) -
+          columnRef.indexOf(moves[i][3][0]) ===
+          2 &&
+        !blackQueenSideCastle
+      ) {
+        newBoard[7][7] = null;
+        newBoard[7][3] = new Rook("black", blackRook);
+        newBoard[7][4] = null;
+        newBoard[7][2] = new King("black", blackKing);
+      }
+    } else {
+      let piece = null;
+
+      if (moves[i][1] === "♟︎") piece = new Pawn("white", whitePawn);
+      if (moves[i][1] === "♜") piece = new Rook("white", whiteRook);
+      if (moves[i][1] === "♞") piece = new Knight("white", whiteKnight);
+      if (moves[i][1] === "♝") piece = new Bishop("white", whiteBishop);
+      if (moves[i][1] === "♛") piece = new Queen("white", whiteQueen);
+      if (moves[i][1] === "♚") piece = new King("white", whiteKing);
+
+      if (moves[i][1] === "♙") piece = new Pawn("black", blackPawn);
+      if (moves[i][1] === "♖") piece = new Rook("black", blackRook);
+      if (moves[i][1] === "♘") piece = new Knight("black", blackKnight);
+      if (moves[i][1] === "♗") piece = new Bishop("black", blackBishop);
+      if (moves[i][1] === "♕") piece = new Queen("black", blackQueen);
+      if (moves[i][1] === "♔") piece = new King("black", blackKing);
+
+      // console.log();
+      // console.log(count);
+      // console.log("startTile", newBoardStartRow, newBoardStartColumn);
+      // console.log("endTile", newBoardEndRow, newBoardEndColumn);
+      // console.log(piece.colour, piece.type);
+      // console.log(enPessantMove);
+
+      newBoard[newBoardStartRow][newBoardStartColumn] = null;
+      newBoard[newBoardEndRow][newBoardEndColumn] = piece;
+      // console.log("last");
     }
   }
 
