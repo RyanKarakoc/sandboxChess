@@ -1,6 +1,13 @@
 const checkEnPassant = (startTile, endTile, boardState, colour, prevMove) => {
   const columnRef = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  const lastMoveTile = [prevMove[2], prevMove[3]];
+  const lastMoveTile = [];
+  if (prevMove === null || prevMove[0] === "O-O" || prevMove[0] === "O-O-O") {
+    return false;
+  }
+  if (prevMove) {
+    lastMoveTile.push(prevMove[3][0], prevMove[3][1]);
+  }
+
   const rowOffset = 1;
   const columnOffset = 1;
   const columnRefStartTile = columnRef.indexOf(startTile.column);

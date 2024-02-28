@@ -50,13 +50,15 @@ class Piece {
 class Pawn extends Piece {
   constructor(colour, representation) {
     super("pawn", colour, representation);
-    this.whiteSymbol = "♙";
-    this.blackSymbol = "♟︎";
+    this.whiteSymbol = "♟︎";
+    this.blackSymbol = "♙";
   }
   movement(startTile, endTile, boardState, colour, prevMove) {
     return checkPawnMovement(startTile, endTile, boardState, colour, prevMove);
   }
   playSound(startTile, endTile, boardState, colour, prevMove) {
+    console.log("pawnSound");
+
     let audio = new Audio(this.moveSound);
     if (checkPawnAttackingKing(startTile, endTile, boardState, colour)) {
       audio = new Audio(this.checkSound);
@@ -90,13 +92,15 @@ class Pawn extends Piece {
 class Rook extends Piece {
   constructor(colour, representation) {
     super("rook", colour, representation);
-    this.whiteSymbol = "♖";
-    this.blackSymbol = "♜";
+    this.whiteSymbol = "♜";
+    this.blackSymbol = "♖";
   }
   movement(startTile, endTile, boardState, colour) {
     return checkRookMovement(startTile, endTile, boardState, colour);
   }
   playSound(startTile, endTile, boardState, colour) {
+    console.log("rookSound");
+
     let audio = new Audio(this.moveSound);
     if (checkRookAttackingKing(startTile, endTile, boardState, colour)) {
       audio = new Audio(this.checkSound);
@@ -124,13 +128,15 @@ class Rook extends Piece {
 class Knight extends Piece {
   constructor(colour, representation) {
     super("knight", colour, representation);
-    this.whiteSymbol = "♘";
-    this.blackSymbol = "♞";
+    this.whiteSymbol = "♞";
+    this.blackSymbol = "♘";
   }
   movement(startTile, endTile, boardState, colour) {
     return checkKnightMovement(startTile, endTile, boardState, colour);
   }
   playSound(startTile, endTile, boardState, colour) {
+    console.log("knightSound");
+
     let audio = new Audio(this.moveSound);
     if (checkKnightAttackingKing(startTile, endTile, boardState, colour)) {
       audio = new Audio(this.checkSound);
@@ -158,13 +164,15 @@ class Knight extends Piece {
 class Bishop extends Piece {
   constructor(colour, representation) {
     super("bishop", colour, representation);
-    this.whiteSymbol = "♗";
-    this.blackSymbol = "♝";
+    this.whiteSymbol = "♝";
+    this.blackSymbol = "♗";
   }
   movement(startTile, endTile, boardState, colour) {
     return checkBishopMovement(startTile, endTile, boardState, colour);
   }
   playSound(startTile, endTile, boardState, colour) {
+    console.log("bishopSound");
+
     let audio = new Audio(this.moveSound);
     if (checkBishopAttackingKing(startTile, endTile, boardState, colour)) {
       audio = new Audio(this.checkSound);
@@ -192,13 +200,15 @@ class Bishop extends Piece {
 class Queen extends Piece {
   constructor(colour, representation) {
     super("queen", colour, representation);
-    this.whiteSymbol = "♕";
-    this.blackSymbol = "♛";
+    this.whiteSymbol = "♛";
+    this.blackSymbol = "♕";
   }
   movement(startTile, endTile, boardState, colour) {
     return checkQueenMovement(startTile, endTile, boardState, colour);
   }
   playSound(startTile, endTile, boardState, colour) {
+    console.log("queenSound");
+
     let audio = new Audio(this.moveSound);
     if (checkQueenAttackingKing(startTile, endTile, boardState, colour)) {
       audio = new Audio(this.checkSound);
@@ -226,8 +236,8 @@ class Queen extends Piece {
 class King extends Piece {
   constructor(colour, representation) {
     super("king", colour, representation);
-    this.whiteSymbol = "♔";
-    this.blackSymbol = "♚";
+    this.whiteSymbol = "♚";
+    this.blackSymbol = "♔";
   }
   movement(startTile, endTile, boardState, colour) {
     return checkKingMovement(startTile, endTile, boardState, colour);
@@ -240,6 +250,7 @@ class King extends Piece {
     haveKingsMoved,
     haveRooksMoved
   ) {
+    console.log("kingSound");
     let audio = new Audio(this.moveSound);
     if (
       canKingCastle(
