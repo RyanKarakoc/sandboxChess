@@ -1,12 +1,12 @@
+import { useGlobalState } from "@/app/Components/context/GlobabStateProvider";
 import { LuChevronLast } from "react-icons/lu";
 
-const LastMoveButton = ({
-  analysisMoveNumber,
-  setAnalysisMoveNumber,
-  moves,
-}) => {
+const LastMoveButton = () => {
+  const { moves, setAlternateMove, analysisMoveNumber, setAnalysisMoveNumber } =
+    useGlobalState();
   const isDisabled = analysisMoveNumber === moves.length ? true : false;
   const handleOnClick = () => {
+    setAlternateMove(moves.length);
     setAnalysisMoveNumber(moves.length);
   };
   return (

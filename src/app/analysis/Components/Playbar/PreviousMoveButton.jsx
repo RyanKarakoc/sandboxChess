@@ -1,13 +1,29 @@
+import { useGlobalState } from "@/app/Components/context/GlobabStateProvider";
 import { MdSkipPrevious } from "react-icons/md";
 
-const PreviousMoveButton = ({
-  analysisMoveNumber,
-  setAnalysisMoveNumber,
-  moves,
-}) => {
+const PreviousMoveButton = () => {
+  const {
+    moves,
+    setMoves,
+    analysisMoves,
+    analysisMoveNumber,
+    alternateMove,
+    setAlternateMove,
+    setAnalysisMoveNumber,
+  } = useGlobalState();
   const isDisabled = analysisMoveNumber === 0 ? true : false;
+
   const handleOnClick = () => {
-    setAnalysisMoveNumber((prevNumber) => (prevNumber -= 1));
+    setAlternateMove(alternateMove - 1);
+    setAnalysisMoveNumber(analysisMoveNumber - 1);
+
+    const originalMoves = [...moves];
+
+    // keeps original analysisMoves
+    if (analysisMoveNumber > analysisMoves.length) {
+      originalMoves.pop();
+      setMoves(originalMoves);
+    }
   };
   return (
     <button
