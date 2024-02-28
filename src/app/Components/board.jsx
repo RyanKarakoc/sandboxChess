@@ -355,21 +355,6 @@ const Board = ({ generateAnyalysisGame }) => {
     setMovingPiece(piece);
   };
 
-  console.log(
-    moves.length,
-    "moves.length",
-    movesPriorToDeviation.length,
-    "movesPriorToDeviation",
-    analysisMoves.length,
-    "analysisMoves"
-  );
-  console.log(
-    alternateMove,
-    "alternateMove",
-    analysisMoveNumber,
-    "analysisMoveNumber"
-  );
-
   return (
     <div className="flex justify-center items-center mb-20">
       <div className="border-4 border-solid border-black rounded-md p-10 bg-amber-200">
